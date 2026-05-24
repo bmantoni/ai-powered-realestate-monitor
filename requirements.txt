@@ -1,0 +1,7 @@
+httpx
+pydantic
+pydantic-settings
+jinja2
+sendgrid
+google-generativeai
+loguru

@@ -1,0 +1,50 @@
+name: Daily Snowshoe Condo Report
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8 AM ET
+  workflow_dispatch:      # Allow manual runs
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download previous state
+        uses: actions/download-artifact@v4
+        with:
+          name: property-data
+          path: data/
+        continue-on-error: true
+
+      - name: Run report generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          SOURCES: ${{ secrets.SOURCES }}
+        run: python src/main.py
+
+      - name: Upload updated state
+        uses: actions/upload-artifact@v4
+        with:
+          name: property-data
+          path: data/properties.json
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: execution-logs
+          path: logs/

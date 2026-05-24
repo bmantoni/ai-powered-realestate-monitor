@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowshoe Condo Daily Report</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7fafc;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .header {
+            background: #2c5282;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .metrics {
+            background: #ffffff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .metrics h2 {
+            margin-top: 0;
+            color: #2c5282;
+            font-size: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            font-weight: 600;
+            color: #4a5568;
+            background-color: #f7fafc;
+        }
+        td {
+            color: #2d3748;
+        }
+        .listing {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            transition: opacity 0.2s;
+        }
+        .listing h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        .listing h3 a {
+            color: #2c5282;
+            text-decoration: none;
+        }
+        .listing h3 a:hover {
+            text-decoration: underline;
+        }
+        .listing img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .price-down {
+            color: #38a169;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .price-up {
+            color: #e53e3e;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .new-badge {
+            background: #48bb78;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .removed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            background-color: #edf2f7;
+        }
+        .empty-state {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            color: #718096;
+            font-size: 16px;
+        }
+        .summary {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 4px;
+            font-style: italic;
+            color: #4a5568;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #a0aec0;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .listing img {
+                max-width: 100%;
+                height: auto;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Snowshoe Condo Daily Report</h1>
+        <p>{{ date.strftime("%B %d, %Y") }}</p>
+    </div>
+
+    <div class="metrics">
+        <h2>Market Overview</h2>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Active Listings</td>
+                <td>{{ snapshot.total_listings }}</td>
+            </tr>
+            <tr>
+                <td>Average Price</td>
+                <td>${{ "{:,.0f}".format(snapshot.average_price) }}</td>
+            </tr>
+            <tr>
+                <td>Median Price</td>
+                <td>${{ "{:,.0f}".format(snapshot.median_price) }}</td>
+            </tr>
+            <tr>
+                <td>New Today</td>
+                <td>{{ new_ids|length }}</td>
+            </tr>
+            <tr>
+                <td>Price Changes</td>
+                <td>{{ price_changed_ids|length }}</td>
+            </tr>
+            <tr>
+                <td>Removed</td>
+                <td>{{ removed_ids|length }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2 style="color: #2c5282; margin-top: 30px;">Listings</h2>
+
+    {% if not properties %}
+    <div class="empty-state">
+        <p>No listings match your criteria today.</p>
+    </div>
+    {% endif %}
+
+    {% for property in properties %}
+    <div class="listing {% if not property.is_available %}removed{% endif %}">
+        {% if property.id in new_ids %}
+        <span class="new-badge">NEW</span>
+        {% endif %}
+        <h3><a href="{{ property.listing_url }}">{{ property.title }}</a></h3>
+        {% if property.image_urls %}
+        <img src="{{ property.image_urls[0] }}" alt="{{ property.title }}">
+        {% endif %}
+        <table>
+            <tr>
+                <td>Price</td>
+                <td>
+                    ${{ "{:,.0f}".format(property.price) }}
+                    {% if property.id in price_changed_ids and property.last_price %}
+                        {% if property.price < property.last_price %}
+                        <span class="price-down">&darr; ${{ "{:,.0f}".format(property.last_price - property.price) }}</span>
+                        {% else %}
+                        <span class="price-up">&uarr; ${{ "{:,.0f}".format(property.price - property.last_price) }}</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Property</td>
+                <td>{{ property.property_name or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>Bedrooms</td>
+                <td>{{ property.bedrooms or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>Bathrooms</td>
+                <td>{{ property.bathrooms or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>Sqft</td>
+                <td>{{ property.sqft or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>{{ property.location or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>View</td>
+                <td>{{ property.ai_view_classification or property.view_description or "N/A" }}</td>
+            </tr>
+        </table>
+        {% if property.ai_summary %}
+        <div class="summary">
+            <strong>Summary:</strong> {{ property.ai_summary }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="footer">
+        <p>Generated by Snowshoe Ski Condo Research Bot</p>
+    </div>
+</body>
+</html>
