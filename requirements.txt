@@ -6,3 +6,4 @@ sendgrid
 google-generativeai
 loguru
 beautifulsoup4
+pytest-cov

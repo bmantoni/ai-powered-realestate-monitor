@@ -8,6 +8,7 @@ from typing import Any
 
 from loguru import logger
 
+from src.ai_scraper import AIScraper
 from src.config import Config
 from src.fetcher import fetch_html
 from src.filter import matches_criteria
@@ -25,9 +26,11 @@ class Pipeline:
         *,
         config: Config,
         storage: JsonStorage,
+        scraper: AIScraper,
     ) -> None:
         self.config = config
         self.storage = storage
+        self.scraper = scraper
 
     async def run(self) -> tuple[DailySnapshot, list[Property]]:
         """Execute the full pipeline for all configured sources.
@@ -59,7 +62,11 @@ class Pipeline:
                     else:
                         listings_html = html
                     
-                    listings = parse_listings_html(listings_html, page_url)
+                    # Use source-specific parser when available, fallback to AI scraper
+                    if "firsttracts.com" in page_url:
+                        listings = parse_listings_html(listings_html, page_url)
+                    else:
+                        listings = await self.scraper.extract_listings(listings_html, page_url)
                     logger.info(
                         "Extracted {} listings from {}",
                         len(listings),
@@ -137,7 +144,12 @@ class Pipeline:
         )
 
         # ------------------------------------------------------------------
-        # 7. Persist
+        # 7. Update last_run timestamp
+        # ------------------------------------------------------------------
+        self.storage._data["last_run"] = datetime.utcnow().isoformat()
+
+        # ------------------------------------------------------------------
+        # 8. Persist
         # ------------------------------------------------------------------
         self.storage.add_snapshot(snapshot.model_dump())
         self.storage.save()

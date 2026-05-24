@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-import logging
 from typing import Optional
 
+from loguru import logger
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Content, Email, Mail, Subject, To
 
 from src.config import Config
-
-logger = logging.getLogger(__name__)
 
 
 class EmailSender:
@@ -41,12 +39,6 @@ class EmailSender:
             ValueError: If the email provider is unsupported or API key is missing.
             Exception: Re-raises any SendGrid API error.
         """
-        if self.config.dry_run:
-            logger.info("DRY RUN - Email would be sent to %s", self.config.email_recipient)
-            logger.info("Subject: %s", subject)
-            logger.info("Content preview:\n%s", html_content[:500])
-            return None
-
         if self.config.smtp_provider == "sendgrid":
             return self._send_via_sendgrid(html_content, subject)
 

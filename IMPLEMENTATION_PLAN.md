@@ -8,47 +8,55 @@
 │                    (or Local / Container)                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
-│  │   Fetcher    │───▶│  AI Scraper  │───▶│   Storage    │  │
-│  │  (fetch raw  │    │ (extracts    │    │  (JSON File) │  │
-│  │   HTML from  │    │ structured   │    │              │  │
-│  │   any URL)   │    │ data from    │    │              │  │
-│  │              │    │ raw HTML)    │    │              │  │
-│  └──────────────┘    └──────────────┘    └──────────────┘  │
-│                              │                               │
-│                              ▼                               │
-│                    ┌──────────────────┐                      │
-│                    │   AI Enrichment  │                      │
-│                    │  (Gemini/Kimi)   │                      │
-│                    └────────┬─────────┘                      │
-│                             │                                │
-│                             ▼                                │
-│                    ┌──────────────────┐                      │
-│                    │ Email Generator  │                      │
-│                    │  (Jinja2/HTML)   │                      │
-│                    └────────┬─────────┘                      │
-│                             │                                │
-│                             ▼                                │
-│                    ┌──────────────────┐                      │
-│                    │  SMTP SendGrid   │                      │
-│                    │  (or SES/GMail)  │                      │
-│                    └──────────────────┘                      │
+│  ┌──────────────┐    ┌──────────────────┐    ┌──────────┐  │
+│  │   Fetcher    │───▶│  HTML Parser     │───▶│ Storage  │  │
+│  │  (fetch raw  │    │ (BeautifulSoup   │    │ (JSON)   │  │
+│  │   HTML from  │    │  for known       │    │          │  │
+│  │   any URL)   │    │  sources)        │    │          │  │
+│  └──────────────┘    └──────────────────┘    └──────────┘  │
+│           │                    │                             │
+│           │                    ▼                             │
+│           │         ┌──────────────────┐                     │
+│           │         │  AI Scraper      │                     │
+│           │         │  (fallback for   │                     │
+│           │         │   new sources)   │                     │
+│           │         └──────────────────┘                     │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌──────────────────┐                                        │
+│  │   AI Enrichment  │                                        │
+│  │  (Gemini/Kimi)   │                                        │
+│  └────────┬─────────┘                                        │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌──────────────────┐                                        │
+│  │ Email Generator  │                                        │
+│  │  (Jinja2/HTML)   │                                        │
+│  └────────┬─────────┘                                        │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌──────────────────┐                                        │
+│  │  SMTP SendGrid   │                                        │
+│  └──────────────────┘                                        │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 Key architectural decisions:
-- **AI Scraping**: Instead of writing custom scrapers per site, fetch raw HTML and use AI to extract structured data. This makes adding new listing sources as simple as adding a URL + AI prompt.
+- **Hybrid Scraping**: Known sources (firsttracts.com) use fast BeautifulSoup HTML parsers. Unknown sources automatically fall back to AI-powered extraction. Adding a new source is as simple as adding a URL—no code changes needed for AI fallback.
+- **AI Enrichment**: View classification and summaries use AI only for properties that pass basic filters, minimizing API costs.
 - **JSON Persistence**: Single JSON file for all state storage. Easy for GitHub Actions artifact persistence and simple to inspect locally.
-- **Local Testing**: Full support for running locally with live data fetching, with optional email suppression.
+- **Local Testing**: Full support for running locally with live data fetching, with optional email suppression. Reports are saved as HTML files for browser viewing.
+- **Pagination**: Automatically follows pagination links to exhaustively fetch all listings.
 
 ## 2. Tech Stack
 
 - **Language**: Python 3.11+
 - **HTTP**: `httpx` (async-capable, modern replacement for requests)
+- **HTML Parsing**: `beautifulsoup4` for fast structured extraction from known sources
 - **Data Processing**: `pydantic` for validation
 - **Templating**: `jinja2` for HTML email generation
-- **Email Delivery**: `sendgrid` (recommended) or `boto3` (AWS SES)
+- **Email Delivery**: `sendgrid` (primary; SES and Gmail documented but not yet implemented)
 - **AI Integration**: `google-generativeai` (Gemini) or OpenAI-compatible client for Kimi
 - **Persistence**: `json` (single file only)
 - **Scheduling**: GitHub Actions `schedule` event or local cron
@@ -99,6 +107,9 @@ class Config(BaseModel):
     # Sources: list of URLs to scrape
     sources: list[str] = ["https://www.firsttracts.com/real-estate/our-listings"]
     
+    # Pagination
+    max_pages_per_source: int = 10  # Maximum pages to fetch per source
+    
     # Filtering criteria
     allowed_properties: list[str] = ["Allegheny Springs", "Rimfire Lodge"]
     required_location_keywords: list[str] = ["Snowshoe Village", "Snowshoe"]
@@ -116,7 +127,7 @@ class Config(BaseModel):
     # Email
     email_recipient: str
     email_from: str = "snowshoe-bot@example.com"
-    smtp_provider: str = "sendgrid"  # "sendgrid", "ses", "gmail"
+    smtp_provider: str = "sendgrid"  # "sendgrid" (SES and Gmail documented but not implemented)
     sendgrid_api_key: Optional[str] = None
     
     # Execution mode
@@ -128,122 +139,95 @@ class Config(BaseModel):
     
     # Scheduling
     run_frequency: str = "0 8 * * *"  # Daily at 8 AM
+    
+    # Logging
+    log_level: str = "INFO"
 ```
 
-## 4. AI Scraping Strategy
+## 4. Hybrid Scraping Strategy
 
-Instead of writing custom scrapers per site, use AI to extract structured data from raw HTML.
+The bot uses a two-tier scraping approach:
 
-### Approach: AI-Powered HTML Parsing
+1. **Fast HTML Parser** – For known sources (firsttracts.com), a source-specific BeautifulSoup parser extracts structured data directly from HTML. This is ~100x faster than AI extraction.
+2. **AI Fallback** – For unknown sources, the pipeline automatically falls back to AI-powered extraction via Gemini/Kimi.
 
-**Step 1: Fetch Raw HTML**
+### Tier 1: Source-Specific HTML Parser (firsttracts.com)
+
 ```python
-import httpx
+from bs4 import BeautifulSoup
 
-async def fetch_html(url: str) -> str:
-    async with httpx.AsyncClient(timeout=30) as client:
-        response = await client.get(url, headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-        })
-        response.raise_for_status()
-        return response.text
+def parse_listings_html(html: str, source_url: str) -> list[Property]:
+    """Parse property listings from firsttracts.com HTML."""
+    soup = BeautifulSoup(html, "html.parser")
+    listings = []
+    
+    for panel in soup.find_all("div", class_="panel"):
+        mls_number = panel.get("data-mlsnumber")
+        if not mls_number:
+            continue
+        
+        # Extract title, price, bedrooms, etc. from structured HTML
+        title = panel.find("h3", class_="panel-title").find("a").get_text(strip=True)
+        price = extract_price_from_text(panel.find("span", class_="pull-right").get_text())
+        bedrooms = extract_badge_value(panel, "Bedrooms")
+        # ... etc
+        
+        listings.append(Property(...))
+    
+    return listings
 ```
 
-**Step 2: AI Extraction**
+### Tier 2: AI-Powered Extraction (Generic Sources)
+
+For unknown sources, the bot falls back to the AI scraper:
+
 ```python
-import json
-from typing import List
-
-EXTRACTION_PROMPT = """
-You are a real estate listing extractor. Given the HTML content of a real estate listings page, extract ALL property listings into a structured JSON array.
-
-For each listing, extract:
-- title: The listing title/property name
-- price: Price as a number (no commas, no $ sign)
-- bedrooms: Number of bedrooms (integer)
-- bathrooms: Number of bathrooms (float, optional)
-- sqft: Square footage (integer, optional)
-- property_name: Building/property complex name (e.g., "Allegheny Springs", "Rimfire Lodge")
-- location: Location description (e.g., "Snowshoe Village")
-- view_description: Any description of the view
-- listing_url: Direct URL to the listing detail page (make absolute if relative)
-- image_urls: Array of image URLs (make absolute if relative)
-- description: Full property description text
-- id: A unique identifier for this listing (extract from URL or data attributes if available)
-
-Return ONLY a valid JSON array. No markdown, no explanation.
-Example: [{"title": "...", "price": 175000, ...}]
-
-HTML Content:
-{html}
-"""
-
 class AIScraper:
     def __init__(self, ai_client):
         self.ai = ai_client
     
-    async def extract_listings(self, html: str, source_url: str) -> List[Property]:
-        prompt = EXTRACTION_PROMPT.format(html=html[:150000])  # Truncate if needed
+    async def extract_listings(self, html: str, source_url: str) -> list[Property]:
+        prompt = EXTRACTION_PROMPT.format(html=html[:150000])
         response = await self.ai.generate_json(prompt)
         
         listings = []
         for item in response:
             listings.append(Property(
-                id=item.get("id") or hash_url(item["listing_url"]),
+                id=item.get("id") or generate_id_from_url(item["listing_url"]),
                 source=extract_source_name(source_url),
                 source_url=source_url,
-                listing_url=make_absolute(item["listing_url"], source_url),
-                title=item["title"],
-                price=item["price"],
-                bedrooms=item.get("bedrooms"),
-                bathrooms=item.get("bathrooms"),
-                sqft=item.get("sqft"),
-                property_name=item.get("property_name"),
-                location=item.get("location"),
-                view_description=item.get("view_description"),
-                image_urls=[make_absolute(url, source_url) for url in item.get("image_urls", [])],
-                description=item.get("description", ""),
-                first_seen=datetime.utcnow(),
-                last_updated=datetime.utcnow(),
-                ai_raw_json=json.dumps(item)
+                # ... etc
             ))
         
         return listings
 ```
 
-**Step 3: Detail Page Fetching (Optional)**
-For listings that need more detail, fetch individual pages:
+### Source Selection in Pipeline
+
 ```python
-async def fetch_detail_pages(listings: List[Property]) -> List[Property]:
-    """Fetch detail pages for listings that need more info."""
-    for listing in listings:
-        if not listing.description or len(listing.description) < 100:
-            try:
-                html = await fetch_html(listing.listing_url)
-                # Use AI to extract full description from detail page
-                listing.description = await extract_description_from_detail(html)
-            except Exception as e:
-                logger.warning(f"Failed to fetch detail for {listing.id}: {e}")
-    return listings
+# In pipeline.py:
+if "firsttracts.com" in page_url:
+    listings = parse_listings_html(listings_html, page_url)
+else:
+    listings = await self.scraper.extract_listings(listings_html, page_url)
 ```
 
-### Why AI Scraping?
+### Why Hybrid?
 
 **Pros:**
-- Adding a new source = adding one URL to config
-- No brittle CSS selectors to maintain
-- Handles different page layouts automatically
-- Can extract semantic meaning (e.g., "this is the property name")
+- **Speed**: Firsttracts.com (primary source) scrapes in ~1 second vs ~90 seconds with AI
+- **Cost**: AI only used for view classification (~5 properties) instead of all 133 listings
+- **Extensibility**: New sources work automatically via AI fallback
+- **Reliability**: Structured HTML parsing is deterministic; no AI hallucinations
 
 **Cons:**
-- Costs money per run (but Gemini free tier is generous)
-- Requires AI availability
-- May hallucinate data if HTML is malformed
+- Source-specific parsers require initial development
+- AI fallback costs money for unknown sources
+- May need new parser for each new source (if performance matters)
 
 **Mitigations:**
-- Cache AI responses by (URL + HTML hash) to avoid re-scraping unchanged pages
-- Validate extracted data (e.g., prices must be reasonable, URLs must resolve)
-- Store raw AI JSON for debugging
+- AI fallback handles new sources without code changes
+- Caching for AI responses
 - Option to skip AI for faster local testing (`skip_ai` flag)
 
 ## 5. JSON Persistence
@@ -553,21 +537,30 @@ snowshoe-condo-bot/
 │   ├── config.py               # Pydantic settings / env vars
 │   ├── models.py               # Pydantic data models
 │   ├── fetcher.py              # HTTP fetching utilities
-│   ├── ai_scraper.py           # AI-powered HTML extraction
+│   ├── firsttracts_scraper.py  # Fast HTML parser for firsttracts.com
+│   ├── ai_scraper.py           # AI-powered HTML extraction (fallback)
+│   ├── ai_client.py            # AI provider abstraction (Gemini/Kimi)
 │   ├── ai_enrichment.py        # AI view classification & summaries
+│   ├── paginator.py            # Pagination support
 │   ├── storage.py              # JSON file persistence
 │   ├── filter.py               # Criteria matching logic
 │   ├── email_generator.py      # Jinja2 + email composition
+│   ├── email_sender.py         # SendGrid delivery
+│   ├── utils.py                # Retry & circuit breaker utilities
 │   └── pipeline.py             # Orchestration logic
 ├── templates/
 │   └── email.html              # Jinja2 email template
 ├── data/
 │   └── .gitkeep                # State files (gitignored in practice)
+├── reports/                    # Generated HTML reports
 ├── tests/
 │   ├── fixtures/               # Sample HTML for testing
 │   ├── test_ai_scraper.py
+│   ├── test_firsttracts_scraper.py
+│   ├── test_paginator.py
 │   ├── test_pipeline.py
-│   └── test_storage.py
+│   ├── test_storage.py
+│   └── test_integration.py
 ├── .env.example
 ├── requirements.txt
 ├── Dockerfile
@@ -653,41 +646,42 @@ CMD ["python", "src/main.py"]
 ## 12. Implementation Phases
 
 ### Phase 1: Foundation
-- [ ] Set up project structure
-- [ ] Implement config with pydantic-settings
-- [ ] Create data models
-- [ ] Implement JSON storage
-- [ ] Set up logging
+- [x] Set up project structure
+- [x] Implement config with pydantic-settings
+- [x] Create data models
+- [x] Implement JSON storage
+- [x] Set up logging
 
-### Phase 2: Fetching & AI Scraping
-- [ ] Implement HTTP fetcher with httpx
-- [ ] Create AI extraction prompts
-- [ ] Implement AI scraper with Gemini
-- [ ] Test with live firsttracts.com data locally
-- [ ] Add caching for AI responses
+### Phase 2: Fetching & Scraping
+- [x] Implement HTTP fetcher with httpx
+- [x] Implement pagination support
+- [x] Create firsttracts.com HTML parser (BeautifulSoup)
+- [x] Implement AI scraper fallback for new sources
+- [x] Test with live firsttracts.com data locally
 
 ### Phase 3: Filtering & Pipeline
-- [ ] Implement criteria matching
-- [ ] Build diff engine (new/changed/removed)
-- [ ] Calculate daily metrics
-- [ ] Test full pipeline locally with DRY_RUN
+- [x] Implement criteria matching
+- [x] Build diff engine (new/changed/removed)
+- [x] Calculate daily metrics
+- [x] Test full pipeline locally with DRY_RUN
 
 ### Phase 4: AI Enrichment
-- [ ] Implement view classification
-- [ ] Implement summary generation
-- [ ] Test view filtering accuracy
+- [x] Implement view classification
+- [x] Implement summary generation
+- [x] Test view filtering accuracy
 
 ### Phase 5: Email & Deployment
-- [ ] Create Jinja2 email template
-- [ ] Implement SendGrid integration
-- [ ] Test email rendering
-- [ ] Set up GitHub Actions workflow
-- [ ] Configure secrets
+- [x] Create Jinja2 email template
+- [x] Implement SendGrid integration
+- [x] Add local HTML report generation
+- [x] Test email rendering
+- [x] Set up GitHub Actions workflow
+- [x] Configure secrets
 
 ### Phase 6: Polish
+- [x] Improve error handling and retries
+- [x] Add monitoring for AI costs
 - [ ] Add more sources to config
-- [ ] Improve error handling and retries
-- [ ] Add monitoring for AI costs
 - [ ] Historical metrics visualization (optional)
 
 ## 13. Environment Variables
@@ -697,34 +691,53 @@ CMD ["python", "src/main.py"]
 | `EMAIL_RECIPIENT` | Yes | Where to send reports | - |
 | `GEMINI_API_KEY` | Yes* | Gemini API key | - |
 | `KIMI_API_KEY` | Yes* | Kimi API key | - |
-| `SENDGRID_API_KEY` | Yes | SendGrid API key | - |
-| `SOURCES` | No | Comma-separated URLs | firsttracts.com |
+| `SENDGRID_API_KEY` | Yes** | SendGrid API key | - |
+| `SOURCES` | No | Comma-separated URLs | `https://www.firsttracts.com/real-estate/our-listings` |
+| `ALLOWED_PROPERTIES` | No | Allowed property names | `Allegheny Springs,Rimfire Lodge` |
+| `REQUIRED_LOCATION_KEYWORDS` | No | Location keywords | `Snowshoe Village,Snowshoe` |
+| `MIN_BEDROOMS` | No | Minimum bedrooms | `1` |
+| `MAX_BEDROOMS` | No | Maximum bedrooms | `1` |
+| `MIN_PRICE` | No | Minimum price filter | `150000` |
+| `MAX_PRICE` | No | Maximum price filter | `200000` |
+| `MAX_PAGES_PER_SOURCE` | No | Max pages to fetch per source | `10` |
+| `AI_PROVIDER` | No | AI provider (`gemini` or `kimi`) | `gemini` |
+| `AI_MODEL` | No | AI model override | `gemini-2.5-flash` |
+| `EMAIL_FROM` | No | Sender email address | `snowshoe-bot@example.com` |
+| `SMTP_PROVIDER` | No | Email provider (`sendgrid`) | `sendgrid` |
 | `DRY_RUN` | No | Skip email sending | `false` |
 | `SKIP_AI` | No | Skip AI enrichment | `false` |
 | `DATA_PATH` | No | State file path | `./data/properties.json` |
+| `RUN_FREQUENCY` | No | Cron expression for scheduling | `0 8 * * *` |
 | `LOG_LEVEL` | No | Logging level | `INFO` |
 
-*At least one AI provider required unless `SKIP_AI=true`
+\*At least one AI provider required unless `SKIP_AI=true`
+\*\*Only SendGrid is currently implemented; SES and Gmail are documented but not yet available
 
 ## 14. Cost Estimation
 
-**AI Scraping (per run):**
-- 1 page × ~50k tokens HTML ≈ $0.01 with Gemini Flash (or free tier)
-- Detail pages: ~5 pages × ~10k tokens ≈ $0.005
-- View classification: ~5 listings × ~1k tokens ≈ $0.001
-- **Total per run: ~$0.02** (well within Gemini free tier)
+**HTML Scraping (per run):**
+- Firsttracts.com parsing: Free (no AI calls)
+- ~14 pages fetched via HTTP
+
+**AI Enrichment (per run):**
+- View classification + summary: ~5 matching listings × ~1k tokens ≈ $0.005
+- **Total AI cost per run: ~$0.005** (well within Gemini free tier)
 
 **Email:**
 - SendGrid free tier: 100 emails/day
 
+**Note:** Unknown sources that fall back to AI scraping will incur higher costs (~$0.02 per page).
+
 ## Success Criteria
 
-- [ ] Runs daily without manual intervention
-- [ ] Adding a new source = adding one URL to config
-- [ ] Accurately identifies properties matching ALL criteria
-- [ ] Correctly detects new listings, price changes, and removals
-- [ ] Sends well-formatted HTML email with images and metrics
-- [ ] State persists between runs via JSON artifact
-- [ ] Easily testable locally with live data
-- [ ] Works with `DRY_RUN=true` for safe testing
-- [ ] AI correctly classifies views (mountain vs ski area vs other)
+- [x] Runs daily without manual intervention
+- [x] Adding a new source = adding one URL to config (falls back to AI scraper)
+- [x] Accurately identifies properties matching ALL criteria
+- [x] Correctly detects new listings, price changes, and removals
+- [x] Sends well-formatted HTML email with images and metrics
+- [x] Generates local HTML reports for browser viewing
+- [x] State persists between runs via JSON artifact
+- [x] Easily testable locally with live data
+- [x] Works with `DRY_RUN=true` for safe testing
+- [x] AI correctly classifies views (mountain vs ski area vs other)
+- [x] Fetches all pages via automatic pagination

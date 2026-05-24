@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
+
+from loguru import logger
 
 if TYPE_CHECKING:
     from src.ai_client import AIClient
     from src.config import Config
     from src.models import Property
-
-logger = logging.getLogger(__name__)
 
 VIEW_PROMPT = """
 Analyze this property description and determine the view type for a condo in Snowshoe, WV ski resort.

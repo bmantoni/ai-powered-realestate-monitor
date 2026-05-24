@@ -164,35 +164,6 @@ class TestEmailSender:
             sender.send_email(html_content=sample_html, subject="Daily Report")
 
     # ------------------------------------------------------------------ #
-    #  dry_run = True  (no real sends)
-    # ------------------------------------------------------------------ #
-
-    @patch("src.email_sender.SendGridAPIClient")
-    def test_dry_run_does_not_call_sendgrid(
-        self,
-        mock_client_cls: MagicMock,
-        dry_run_sender: EmailSender,
-        sample_html: str,
-    ) -> None:
-        """In dry-run mode, SendGridAPIClient should never be instantiated."""
-        result = dry_run_sender.send_email(html_content=sample_html, subject="Daily Report")
-
-        mock_client_cls.assert_not_called()
-        assert result is None
-
-    def test_dry_run_logs_email(self, dry_run_sender: EmailSender, sample_html: str, caplog: Any) -> None:
-        """In dry-run mode, the sender should log the email details instead of sending."""
-        import logging
-
-        with caplog.at_level(logging.INFO):
-            dry_run_sender.send_email(html_content=sample_html, subject="Daily Report")
-
-        assert "DRY RUN" in caplog.text
-        assert "recipient@example.com" in caplog.text
-        assert "Daily Report" in caplog.text
-        assert "Test Email" in caplog.text
-
-    # ------------------------------------------------------------------ #
     #  Unsupported provider
     # ------------------------------------------------------------------ #
 

@@ -16,8 +16,10 @@ from loguru import logger
 
 from src.ai_client import AIClient, GeminiAIClient, MockAIClient
 from src.ai_enrichment import AIEnricher
+from src.ai_scraper import AIScraper
 from src.config import Config
 from src.email_generator import EmailGenerator
+from src.filter import matches_criteria
 from src.email_sender import EmailSender
 from src.models import DailySnapshot, Property
 from src.pipeline import Pipeline
@@ -181,8 +183,9 @@ async def run_bot(config: Config) -> int:
     logger.info("Storage initialised at {} — {} properties tracked", config.data_path, len(storage.get_all_properties()))
 
     ai_client = create_ai_client(config)
+    scraper = AIScraper(ai_client)
     enricher = AIEnricher(ai_client, config)
-    pipeline = Pipeline(config=config, storage=storage)
+    pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
     email_gen = EmailGenerator()
     email_sender = EmailSender(config)
 
@@ -213,6 +216,18 @@ async def run_bot(config: Config) -> int:
             # properties already holds the unenriched list from pipeline.run()
     else:
         logger.info("AI enrichment skipped (--skip-ai)")
+
+    # Re-filter after enrichment to apply view classification
+    pre_view_filter_count = len(properties)
+    properties = [p for p in properties if matches_criteria(p, config)]
+    post_view_filter_count = len(properties)
+    if pre_view_filter_count != post_view_filter_count:
+        logger.info(
+            "View filter removed {} properties ({} → {})",
+            pre_view_filter_count - post_view_filter_count,
+            pre_view_filter_count,
+            post_view_filter_count,
+        )
 
     # Persist any enriched data back to storage
     for prop in properties:
