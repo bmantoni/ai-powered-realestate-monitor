@@ -34,6 +34,33 @@ class AIClient(abc.ABC):
         ...
 
 
+class GeminiAIClient(AIClient):
+    """Google Gemini AI client implementation."""
+
+    def __init__(self, api_key: str, model: str | None = None) -> None:
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        self._model = genai.GenerativeModel(model or "gemini-2.5-flash")
+        self.call_count: int = 0
+
+    async def generate_json(self, prompt: str) -> list[dict[str, Any]]:
+        self.call_count += 1
+        import json
+        response = await self._model.generate_content_async(prompt)
+        text = response.text
+        # Extract JSON from markdown code blocks if present
+        if "```json" in text:
+            text = text.split("```json")[1].split("```")[0]
+        elif "```" in text:
+            text = text.split("```")[1].split("```")[0]
+        return json.loads(text.strip())
+
+    async def generate_text(self, prompt: str) -> str:
+        self.call_count += 1
+        response = await self._model.generate_content_async(prompt)
+        return response.text.strip()
+
+
 class MockAIClient(AIClient):
     """Test/mock implementation of AIClient for unit testing."""
 

@@ -14,9 +14,8 @@ from typing import Any
 
 from loguru import logger
 
-from src.ai_client import AIClient, MockAIClient
+from src.ai_client import AIClient, GeminiAIClient, MockAIClient
 from src.ai_enrichment import AIEnricher
-from src.ai_scraper import AIScraper
 from src.config import Config
 from src.email_generator import EmailGenerator
 from src.email_sender import EmailSender
@@ -135,19 +134,25 @@ def _save_html_report(html: str, date: datetime) -> Path:
 def create_ai_client(config: Config) -> AIClient:
     """Create an AI client based on configuration.
 
-    Currently returns a MockAIClient for testing. In production this would
-    instantiate the provider-specific client (Gemini, Kimi, etc.).
-
     Args:
         config: Application configuration.
 
     Returns:
         An AIClient implementation.
     """
-    # TODO: Implement real Gemini / Kimi clients in src/ai_client.py
-    # For now, return a mock client that returns empty responses.
-    # This allows the pipeline to run without real API keys in tests.
-    return MockAIClient()
+    if config.ai_provider == "gemini" and config.gemini_api_key:
+        logger.info("Using Gemini AI client")
+        return GeminiAIClient(config.gemini_api_key, config.ai_model)
+    elif config.ai_provider == "kimi" and config.kimi_api_key:
+        logger.info("Using Kimi AI client (not yet implemented)")
+        # TODO: Implement Kimi client
+        return MockAIClient()
+    else:
+        logger.warning(
+            "No AI API key configured (provider={}). Using mock client.",
+            config.ai_provider,
+        )
+        return MockAIClient()
 
 
 async def run_bot(config: Config) -> int:
@@ -176,9 +181,8 @@ async def run_bot(config: Config) -> int:
     logger.info("Storage initialised at {} — {} properties tracked", config.data_path, len(storage.get_all_properties()))
 
     ai_client = create_ai_client(config)
-    scraper = AIScraper(ai_client)
     enricher = AIEnricher(ai_client, config)
-    pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
+    pipeline = Pipeline(config=config, storage=storage)
     email_gen = EmailGenerator()
     email_sender = EmailSender(config)
 

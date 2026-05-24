@@ -8,11 +8,12 @@ from typing import Any
 
 from loguru import logger
 
-from src.ai_scraper import AIScraper
 from src.config import Config
 from src.fetcher import fetch_html
 from src.filter import matches_criteria
+from src.firsttracts_scraper import parse_listings_html
 from src.models import DailySnapshot, Property
+from src.paginator import Paginator
 from src.storage import JsonStorage
 
 
@@ -24,11 +25,9 @@ class Pipeline:
         *,
         config: Config,
         storage: JsonStorage,
-        scraper: AIScraper,
     ) -> None:
         self.config = config
         self.storage = storage
-        self.scraper = scraper
 
     async def run(self) -> tuple[DailySnapshot, list[Property]]:
         """Execute the full pipeline for all configured sources.
@@ -39,13 +38,34 @@ class Pipeline:
         all_properties: list[Property] = []
 
         # ------------------------------------------------------------------
-        # 1. Fetch & extract from every source
+        # 1. Fetch & extract from every source (with pagination)
         # ------------------------------------------------------------------
+        paginator = Paginator(max_pages=self.config.max_pages_per_source)
         for source_url in self.config.sources:
             try:
-                html = await fetch_html(source_url)
-                listings = await self.scraper.extract_listings(html, source_url)
-                all_properties.extend(listings)
+                pages = await paginator.fetch_all_pages(source_url)
+                for page_url, html in pages:
+                    # Some sites (like firsttracts.com) return AJAX responses
+                    # split by "~~" into [listings_html, count, pagination]
+                    if "~~" in html:
+                        parts = html.split("~~")
+                        listings_html = parts[0] if parts else html
+                        logger.debug(
+                            "Parsed AJAX response for {}: {} parts, listings HTML is {} chars",
+                            page_url,
+                            len(parts),
+                            len(listings_html),
+                        )
+                    else:
+                        listings_html = html
+                    
+                    listings = parse_listings_html(listings_html, page_url)
+                    logger.info(
+                        "Extracted {} listings from {}",
+                        len(listings),
+                        page_url,
+                    )
+                    all_properties.extend(listings)
             except Exception as exc:
                 logger.warning("Source {} failed: {}", source_url, exc)
                 continue

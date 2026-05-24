@@ -128,8 +128,8 @@ def populated_storage_file(temp_dir: Path) -> Path:
 
 
 @pytest.fixture
-def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Remove relevant environment variables to ensure clean Config tests."""
+def clean_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    """Remove relevant environment variables and change to temp directory."""
     env_vars = [
         "EMAIL_RECIPIENT",
         "SOURCES",
@@ -151,6 +151,9 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
         "DATA_PATH",
         "RUN_FREQUENCY",
         "LOG_LEVEL",
+        "MAX_PAGES_PER_SOURCE",
     ]
     for var in env_vars:
         monkeypatch.delenv(var, raising=False)
+    # Change to temp dir so pydantic-settings doesn't find project's .env file
+    monkeypatch.chdir(tmp_path)

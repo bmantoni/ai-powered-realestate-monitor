@@ -24,6 +24,13 @@ class Config(BaseSettings):
         description="List of URLs to scrape for property listings.",
     )
 
+    # Pagination
+    max_pages_per_source: int = Field(
+        default=10,
+        ge=1,
+        description="Maximum number of pages to fetch per source.",
+    )
+
     # Filtering criteria
     allowed_properties: List[str] = Field(
         default_factory=lambda: ["Allegheny Springs", "Rimfire Lodge"],

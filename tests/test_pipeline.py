@@ -79,7 +79,7 @@ class TestDiffEngine:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert "new-001" in snapshot.new_listings
@@ -112,7 +112,7 @@ class TestDiffEngine:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert "existing-001" in snapshot.price_changes
@@ -149,7 +149,7 @@ class TestDiffEngine:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert "old-001" in snapshot.removed_listings
@@ -185,7 +185,7 @@ class TestDiffEngine:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert snapshot.new_listings == []
@@ -208,7 +208,7 @@ class TestSnapshotCalculation:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, _ = await pipeline.run()
 
         assert snapshot.total_listings == 2
@@ -221,7 +221,7 @@ class TestSnapshotCalculation:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, _ = await pipeline.run()
 
         assert snapshot.average_price == 175_000.0
@@ -234,7 +234,7 @@ class TestSnapshotCalculation:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, _ = await pipeline.run()
 
         assert snapshot.median_price == 175_000.0
@@ -248,7 +248,7 @@ class TestSnapshotCalculation:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, _ = await pipeline.run()
 
         assert snapshot.median_price == 200_000.0
@@ -260,7 +260,7 @@ class TestSnapshotCalculation:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, _ = await pipeline.run()
 
         assert snapshot.median_price == 180_000.0
@@ -269,7 +269,7 @@ class TestSnapshotCalculation:
     async def test_empty_snapshot_when_no_listings(self, pipeline: Pipeline, scraper: MagicMock) -> None:
         scraper.extract_listings = AsyncMock(return_value=[])
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert snapshot.total_listings == 0
@@ -293,7 +293,7 @@ class TestFilteringIntegration:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert len(properties) == 1
@@ -346,7 +346,7 @@ class TestFilteringIntegration:
         ]
         scraper.extract_listings = AsyncMock(return_value=fetched)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert snapshot.new_listings == ["good-new"]
@@ -376,7 +376,7 @@ class TestErrorHandling:
         scraper.extract_listings = AsyncMock(return_value=[good_property])
 
         with patch(
-            "src.pipeline.fetch_html",
+            "src.paginator.fetch_html",
             new_callable=AsyncMock,
             side_effect=[Exception("Connection refused"), "<html>good</html>"],
         ):
@@ -406,7 +406,7 @@ class TestErrorHandling:
 
         scraper.extract_listings = AsyncMock(side_effect=_extract)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert len(properties) == 1
@@ -415,7 +415,7 @@ class TestErrorHandling:
     @pytest.mark.asyncio
     async def test_all_sources_fail_returns_empty(self, pipeline: Pipeline, scraper: MagicMock) -> None:
         """If every source fails, the pipeline should return an empty snapshot gracefully."""
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, side_effect=Exception("Boom")):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, side_effect=Exception("Boom")):
             snapshot, properties = await pipeline.run()
 
         assert snapshot.total_listings == 0
@@ -447,7 +447,7 @@ class TestMultiSourceAggregation:
 
         scraper.extract_listings = AsyncMock(side_effect=_extract)
 
-        with patch("src.pipeline.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, return_value="<html></html>"):
             snapshot, properties = await pipeline.run()
 
         assert len(properties) == 2
@@ -455,3 +455,119 @@ class TestMultiSourceAggregation:
         assert ids == {"src1-a", "src2-b"}
         assert snapshot.total_listings == 2
         assert snapshot.average_price == 175_000.0
+
+
+# ---------------------------------------------------------------------------
+# Pagination integration
+# ---------------------------------------------------------------------------
+
+
+class TestPaginationIntegration:
+    @pytest.mark.asyncio
+    async def test_aggregates_listings_from_multiple_pages(self, config: Config, scraper: MagicMock, tmp_path: Path) -> None:
+        """Pipeline should fetch all pages via paginator and combine listings."""
+        config.data_path = str(tmp_path / "pagination-test.json")
+        storage = JsonStorage(config.data_path)
+        pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
+
+        async def _extract(html: str, source_url: str) -> list[Property]:
+            if "page=2" in source_url:
+                return [_make_property(id="page2-a", price=190_000.0, source_url=source_url)]
+            return [
+                _make_property(id="page1-a", price=160_000.0, source_url=source_url),
+                _make_property(id="page1-b", price=170_000.0, source_url=source_url),
+            ]
+
+        scraper.extract_listings = AsyncMock(side_effect=_extract)
+
+        async def _fetch(url: str) -> str:
+            if url == "https://example.com/listings":
+                return '<html><body><a href="?page=2">Next</a>page 1</body></html>'
+            if "page=2" in url:
+                return "<html><body>page 2</body></html>"
+            return ""
+
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, side_effect=_fetch):
+            snapshot, properties = await pipeline.run()
+
+        assert len(properties) == 3
+        ids = {p.id for p in properties}
+        assert ids == {"page1-a", "page1-b", "page2-a"}
+        assert snapshot.total_listings == 3
+
+    @pytest.mark.asyncio
+    async def test_passes_page_url_to_scraper(self, config: Config, scraper: MagicMock, tmp_path: Path) -> None:
+        """Each page's specific URL should be passed to the scraper as source_url."""
+        config.data_path = str(tmp_path / "page-url-test.json")
+        storage = JsonStorage(config.data_path)
+        pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
+
+        captured_urls: list[str] = []
+
+        async def _extract(html: str, source_url: str) -> list[Property]:
+            captured_urls.append(source_url)
+            return [_make_property(id="x", price=160_000.0, source_url=source_url)]
+
+        scraper.extract_listings = AsyncMock(side_effect=_extract)
+
+        async def _fetch(url: str) -> str:
+            if url == "https://example.com/listings":
+                return '<html><body><a href="?page=2">Next</a></body></html>'
+            return "<html><body>last</body></html>"
+
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, side_effect=_fetch):
+            await pipeline.run()
+
+        assert captured_urls == [
+            "https://example.com/listings",
+            "https://example.com/listings?page=2",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_respects_max_pages_per_source(self, config: Config, scraper: MagicMock, tmp_path: Path) -> None:
+        """The pipeline should respect config.max_pages_per_source."""
+        config.max_pages_per_source = 2
+        config.data_path = str(tmp_path / "max-pages-test.json")
+        storage = JsonStorage(config.data_path)
+        pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
+
+        scraper.extract_listings = AsyncMock(return_value=[])
+
+        async def _fetch(url: str) -> str:
+            page_num = 1
+            if "page=" in url:
+                page_num = int(url.split("page=")[-1])
+            next_page = page_num + 1
+            return f'<html><body><a href="?page={next_page}">Next</a></body></html>'
+
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, side_effect=_fetch):
+            await pipeline.run()
+
+        # Should have fetched exactly 2 pages due to max_pages_per_source=2
+        assert scraper.extract_listings.await_count == 2
+
+    @pytest.mark.asyncio
+    async def test_pagination_failure_does_not_kill_source(self, config: Config, scraper: MagicMock, tmp_path: Path) -> None:
+        """If page 2 fails, page 1 listings should still be processed."""
+        config.data_path = str(tmp_path / "partial-test.json")
+        storage = JsonStorage(config.data_path)
+        pipeline = Pipeline(config=config, storage=storage, scraper=scraper)
+
+        async def _extract(html: str, source_url: str) -> list[Property]:
+            if "page=2" in source_url:
+                return [_make_property(id="page2", price=190_000.0, source_url=source_url)]
+            return [_make_property(id="page1", price=160_000.0, source_url=source_url)]
+
+        scraper.extract_listings = AsyncMock(side_effect=_extract)
+
+        async def _fetch(url: str) -> str:
+            if "page=2" in url:
+                raise RuntimeError("Server error")
+            return '<html><body><a href="?page=2">Next</a></body></html>'
+
+        with patch("src.paginator.fetch_html", new_callable=AsyncMock, side_effect=_fetch):
+            snapshot, properties = await pipeline.run()
+
+        assert len(properties) == 1
+        assert properties[0].id == "page1"
+        assert snapshot.total_listings == 1
