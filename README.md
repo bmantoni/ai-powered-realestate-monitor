@@ -23,9 +23,9 @@ A Python bot that scrapes real-estate listings for ski condos at Snowshoe, WV, f
                     └────────┬─────────┘
                              │
                              ▼
-                    ┌──────────────────┐
-                    │  SMTP SendGrid   │
-                    └──────────────────┘
+                     ┌──────────────────┐
+                     │  SMTP (Gmail)    │
+                     └──────────────────┘
 ```
 
 Key decisions:
@@ -42,7 +42,7 @@ Key decisions:
 - **HTML Parsing** – `beautifulsoup4`
 - **Validation** – `pydantic` / `pydantic-settings`
 - **Templating** – `jinja2`
-- **Email** – `sendgrid`
+- **Email** – `smtplib` (Gmail SMTP)
 - **AI** – `google-generativeai` (Gemini)
 - **Logging** – `loguru`
 
@@ -67,8 +67,12 @@ Create a `.env` file (see `.env.example` for all options):
 EMAIL_RECIPIENT=you@example.com
 GEMINI_API_KEY=your_key_here
 
-# Required for email delivery
-SENDGRID_API_KEY=your_sendgrid_key
+# Required for email delivery (Gmail)
+# Use an App Password, not your regular Gmail password!
+# Generate one at: https://myaccount.google.com/apppasswords
+EMAIL_FROM=your-email@gmail.com
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-gmail-app-password
 
 # Optional
 DRY_RUN=true              # Set to true to skip sending email
@@ -105,7 +109,8 @@ All settings are controlled via environment variables (or `.env`):
 | `EMAIL_RECIPIENT` | **Yes** | Where to send reports | — |
 | `GEMINI_API_KEY` | Yes* | Gemini API key | — |
 | `KIMI_API_KEY` | Yes* | Kimi API key | — |
-| `SENDGRID_API_KEY` | Yes** | SendGrid API key | — |
+| `SMTP_USERNAME` | Yes** | Gmail address (e.g., you@gmail.com) | — |
+| `SMTP_PASSWORD` | Yes** | Gmail App Password (not your regular password!) | — |
 | `SOURCES` | No | Comma-separated URLs | `https://www.firsttracts.com/real-estate/our-listings` |
 | `ALLOWED_PROPERTIES` | No | Allowed property names | `Allegheny Springs,Rimfire Lodge` |
 | `REQUIRED_LOCATION_KEYWORDS` | No | Location keywords | `Snowshoe Village,Snowshoe` |
@@ -116,8 +121,10 @@ All settings are controlled via environment variables (or `.env`):
 | `MAX_PAGES_PER_SOURCE` | No | Max pages per source | `10` |
 | `AI_PROVIDER` | No | AI provider | `gemini` |
 | `AI_MODEL` | No | AI model override | `gemini-2.5-flash` |
-| `EMAIL_FROM` | No | Sender email | `snowshoe-bot@example.com` |
-| `SMTP_PROVIDER` | No | Email provider | `sendgrid` |
+| `EMAIL_FROM` | No | Sender email | `your-email@gmail.com` |
+| `SMTP_HOST` | No | SMTP server | `smtp.gmail.com` |
+| `SMTP_PORT` | No | SMTP port | `587` |
+| `SMTP_USE_TLS` | No | Use TLS encryption | `true` |
 | `DRY_RUN` | No | Skip email sending | `false` |
 | `SKIP_AI` | No | Skip AI enrichment | `false` |
 | `DATA_PATH` | No | State file path | `./data/properties.json` |
@@ -125,7 +132,7 @@ All settings are controlled via environment variables (or `.env`):
 | `LOG_LEVEL` | No | Logging level | `INFO` |
 
 \*At least one AI provider is required unless `SKIP_AI=true`.
-\*\*Required for email delivery (only SendGrid is currently implemented).
+\*\*Required for email delivery. Use a Gmail App Password, not your regular Gmail password. Generate one at https://myaccount.google.com/apppasswords.
 
 ## Deployment
 
@@ -134,10 +141,14 @@ All settings are controlled via environment variables (or `.env`):
 1. Push this repository to GitHub.
 2. Add the following secrets in **Settings → Secrets and variables → Actions**:
    - `GEMINI_API_KEY`
-   - `SENDGRID_API_KEY`
    - `EMAIL_RECIPIENT`
+   - `SMTP_USERNAME` (your Gmail address)
+   - `SMTP_PASSWORD` (your Gmail App Password — not your regular password!)
+   - `EMAIL_FROM` (optional, defaults to SMTP_USERNAME)
    - `SOURCES` (optional)
 3. The workflow (`.github/workflows/daily-report.yml`) runs daily at 8 AM ET and uploads the JSON state as an artifact for persistence.
+
+**Note:** You must use a Gmail App Password, not your regular Gmail password. Generate one at https://myaccount.google.com/apppasswords.
 
 ### Docker (Home Server)
 
@@ -147,8 +158,9 @@ Build and run:
 docker build -t snowshoe-bot .
 docker run --rm \
   -e GEMINI_API_KEY=$GEMINI_API_KEY \
-  -e SENDGRID_API_KEY=$SENDGRID_API_KEY \
   -e EMAIL_RECIPIENT=$EMAIL_RECIPIENT \
+  -e SMTP_USERNAME=$SMTP_USERNAME \
+  -e SMTP_PASSWORD=$SMTP_PASSWORD \
   -e DRY_RUN=false \
   -v $(pwd)/data:/app/data \
   snowshoe-bot
@@ -157,7 +169,7 @@ docker run --rm \
 For scheduled runs, add to your host's `crontab`:
 
 ```cron
-0 8 * * * docker run --rm -e GEMINI_API_KEY=... -e SENDGRID_API_KEY=... snowshoe-bot
+0 8 * * * docker run --rm -e GEMINI_API_KEY=... -e SMTP_USERNAME=... -e SMTP_PASSWORD=... snowshoe-bot
 ```
 
 ## Project Structure

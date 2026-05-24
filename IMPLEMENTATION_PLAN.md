@@ -124,11 +124,14 @@ class Config(BaseModel):
     kimi_api_key: Optional[str] = None
     ai_model: Optional[str] = None  # Override default model
     
-    # Email
+    # Email (Gmail SMTP)
     email_recipient: str
-    email_from: str = "snowshoe-bot@example.com"
-    smtp_provider: str = "sendgrid"  # "sendgrid" (SES and Gmail documented but not implemented)
-    sendgrid_api_key: Optional[str] = None
+    email_from: str = "your-email@gmail.com"
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_username: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_use_tls: bool = True
     
     # Execution mode
     dry_run: bool = False  # If True, fetch and process but don't send email
@@ -691,7 +694,8 @@ CMD ["python", "src/main.py"]
 | `EMAIL_RECIPIENT` | Yes | Where to send reports | - |
 | `GEMINI_API_KEY` | Yes* | Gemini API key | - |
 | `KIMI_API_KEY` | Yes* | Kimi API key | - |
-| `SENDGRID_API_KEY` | Yes** | SendGrid API key | - |
+| `SMTP_USERNAME` | Yes** | Gmail address (e.g., you@gmail.com) | - |
+| `SMTP_PASSWORD` | Yes** | Gmail App Password | - |
 | `SOURCES` | No | Comma-separated URLs | `https://www.firsttracts.com/real-estate/our-listings` |
 | `ALLOWED_PROPERTIES` | No | Allowed property names | `Allegheny Springs,Rimfire Lodge` |
 | `REQUIRED_LOCATION_KEYWORDS` | No | Location keywords | `Snowshoe Village,Snowshoe` |
@@ -702,8 +706,10 @@ CMD ["python", "src/main.py"]
 | `MAX_PAGES_PER_SOURCE` | No | Max pages to fetch per source | `10` |
 | `AI_PROVIDER` | No | AI provider (`gemini` or `kimi`) | `gemini` |
 | `AI_MODEL` | No | AI model override | `gemini-2.5-flash` |
-| `EMAIL_FROM` | No | Sender email address | `snowshoe-bot@example.com` |
-| `SMTP_PROVIDER` | No | Email provider (`sendgrid`) | `sendgrid` |
+| `EMAIL_FROM` | No | Sender email address | `your-email@gmail.com` |
+| `SMTP_HOST` | No | SMTP server hostname | `smtp.gmail.com` |
+| `SMTP_PORT` | No | SMTP server port | `587` |
+| `SMTP_USE_TLS` | No | Use TLS encryption | `true` |
 | `DRY_RUN` | No | Skip email sending | `false` |
 | `SKIP_AI` | No | Skip AI enrichment | `false` |
 | `DATA_PATH` | No | State file path | `./data/properties.json` |
@@ -711,7 +717,7 @@ CMD ["python", "src/main.py"]
 | `LOG_LEVEL` | No | Logging level | `INFO` |
 
 \*At least one AI provider required unless `SKIP_AI=true`
-\*\*Only SendGrid is currently implemented; SES and Gmail are documented but not yet available
+\*\*Required for email delivery. Use a Gmail App Password, not your regular Gmail password. Generate one at https://myaccount.google.com/apppasswords.
 
 ## 14. Cost Estimation
 
@@ -724,7 +730,7 @@ CMD ["python", "src/main.py"]
 - **Total AI cost per run: ~$0.005** (well within Gemini free tier)
 
 **Email:**
-- SendGrid free tier: 100 emails/day
+- Gmail SMTP: Free (within Gmail sending limits)
 
 **Note:** Unknown sources that fall back to AI scraping will incur higher costs (~$0.02 per page).
 

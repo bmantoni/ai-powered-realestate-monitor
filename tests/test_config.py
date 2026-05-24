@@ -60,11 +60,13 @@ class TestConfigDefaults:
         config = Config()
         assert config.email_from == "snowshoe-bot@example.com"
 
-    def test_default_smtp_provider(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Default SMTP provider is sendgrid."""
+    def test_default_smtp_settings(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Default SMTP settings are for Gmail."""
         monkeypatch.setenv("EMAIL_RECIPIENT", "test@example.com")
         config = Config()
-        assert config.smtp_provider == "sendgrid"
+        assert config.smtp_host == "smtp.gmail.com"
+        assert config.smtp_port == 587
+        assert config.smtp_use_tls is True
 
     def test_default_flags(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
         """dry_run and skip_ai default to False."""
@@ -175,15 +177,17 @@ class TestConfigEnvOverrides:
         assert config.max_price == 300_000
 
     def test_api_keys_from_env(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
-        """API key env vars are loaded as strings."""
+        """API key and SMTP credential env vars are loaded as strings."""
         monkeypatch.setenv("EMAIL_RECIPIENT", "test@example.com")
         monkeypatch.setenv("GEMINI_API_KEY", "gemini-key-123")
         monkeypatch.setenv("KIMI_API_KEY", "kimi-key-456")
-        monkeypatch.setenv("SENDGRID_API_KEY", "sendgrid-key-789")
+        monkeypatch.setenv("SMTP_USERNAME", "user@example.com")
+        monkeypatch.setenv("SMTP_PASSWORD", "smtp-pass-789")
         config = Config()
         assert config.gemini_api_key == "gemini-key-123"
         assert config.kimi_api_key == "kimi-key-456"
-        assert config.sendgrid_api_key == "sendgrid-key-789"
+        assert config.smtp_username == "user@example.com"
+        assert config.smtp_password == "smtp-pass-789"
 
     def test_extra_env_vars_ignored(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
         """Extra environment variables do not cause validation errors."""

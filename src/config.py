@@ -54,8 +54,11 @@ class Config(BaseSettings):
     # Email
     email_recipient: str = Field(..., description="Primary recipient email address.")
     email_from: str = Field(default="snowshoe-bot@example.com")
-    smtp_provider: str = Field(default="sendgrid", description="sendgrid, ses, or gmail")
-    sendgrid_api_key: Optional[str] = None
+    smtp_host: str = Field(default="smtp.gmail.com", description="SMTP server hostname.")
+    smtp_port: int = Field(default=587, description="SMTP server port.")
+    smtp_username: Optional[str] = Field(default=None, description="SMTP username (usually your email address).")
+    smtp_password: Optional[str] = Field(default=None, description="SMTP password or app-specific password.")
+    smtp_use_tls: bool = Field(default=True, description="Use TLS encryption for SMTP.")
 
     # Execution mode
     dry_run: bool = Field(

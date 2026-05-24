@@ -1,8 +1,7 @@
-"""Tests for the email sender module."""
+"""Tests for the email sender module (SMTP)."""
 
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -12,39 +11,26 @@ from src.email_sender import EmailSender
 
 
 class TestEmailSender:
-    """Comprehensive tests for EmailSender."""
+    """Comprehensive tests for EmailSender using SMTP."""
 
     @pytest.fixture
     def config(self) -> Config:
-        """Return a Config with email settings enabled."""
+        """Return a Config with SMTP credentials."""
         return Config(
             email_recipient="recipient@example.com",
-            email_from="snowshoe-bot@example.com",
-            smtp_provider="sendgrid",
-            sendgrid_api_key="SG.test-key",
+            email_from="sender@gmail.com",
+            smtp_host="smtp.gmail.com",
+            smtp_port=587,
+            smtp_username="sender@gmail.com",
+            smtp_password="app-password",
+            smtp_use_tls=True,
             dry_run=False,
-        )
-
-    @pytest.fixture
-    def dry_run_config(self) -> Config:
-        """Return a Config with dry_run enabled."""
-        return Config(
-            email_recipient="recipient@example.com",
-            email_from="snowshoe-bot@example.com",
-            smtp_provider="sendgrid",
-            sendgrid_api_key="SG.test-key",
-            dry_run=True,
         )
 
     @pytest.fixture
     def sender(self, config: Config) -> EmailSender:
         """Return an EmailSender instance wired to a live config."""
         return EmailSender(config)
-
-    @pytest.fixture
-    def dry_run_sender(self, dry_run_config: Config) -> EmailSender:
-        """Return an EmailSender instance in dry-run mode."""
-        return EmailSender(dry_run_config)
 
     @pytest.fixture
     def sample_html(self) -> str:
@@ -59,124 +45,151 @@ class TestEmailSender:
         """The sender should store the supplied Config object."""
         assert sender.config is config
 
-    def test_init_sets_sendgrid_api_key(self, sender: EmailSender) -> None:
-        """The sender should expose the SendGrid API key from config."""
-        assert sender.sendgrid_api_key == "SG.test-key"
-
     # ------------------------------------------------------------------ #
-    #  dry_run = False  (real sends)
+    #  Successful sends
     # ------------------------------------------------------------------ #
 
-    @patch("src.email_sender.SendGridAPIClient")
-    def test_send_email_calls_sendgrid_api(
+    @patch("smtplib.SMTP")
+    def test_send_email_calls_smtp(
         self,
-        mock_client_cls: MagicMock,
+        mock_smtp_cls: MagicMock,
         sender: EmailSender,
         sample_html: str,
     ) -> None:
-        """send_email should instantiate SendGridAPIClient and call send()."""
-        mock_client = MagicMock()
-        mock_client_cls.return_value = mock_client
-
-        sender.send_email(html_content=sample_html, subject="Daily Report")
-
-        mock_client_cls.assert_called_once_with(api_key="SG.test-key")
-        mock_client.send.assert_called_once()
-
-    @patch("src.email_sender.SendGridAPIClient")
-    def test_send_email_composes_message_correctly(
-        self,
-        mock_client_cls: MagicMock,
-        sender: EmailSender,
-        sample_html: str,
-    ) -> None:
-        """The Mail object passed to send() must have correct to, from, subject, and HTML content."""
-        mock_client = MagicMock()
-        mock_client_cls.return_value = mock_client
-
-        sender.send_email(html_content=sample_html, subject="Daily Report")
-
-        call_args = mock_client.send.call_args
-        message = call_args[0][0]
-
-        # to — stored inside personalizations
-        assert message.personalizations[0].tos[0]["email"] == "recipient@example.com"
-        # from
-        assert message.from_email.email == "snowshoe-bot@example.com"
-        # subject
-        assert message.subject.subject == "Daily Report"
-        # html content
-        payload = message.get()
-        assert payload["content"][0]["value"] == sample_html
-        assert payload["content"][0]["type"] == "text/html"
-
-    @patch("src.email_sender.SendGridAPIClient")
-    def test_send_email_returns_status_code(
-        self,
-        mock_client_cls: MagicMock,
-        sender: EmailSender,
-        sample_html: str,
-    ) -> None:
-        """send_email should return the HTTP status code from the SendGrid response."""
-        mock_response = MagicMock()
-        mock_response.status_code = 202
-        mock_client = MagicMock()
-        mock_client.send.return_value = mock_response
-        mock_client_cls.return_value = mock_client
+        """send_email should instantiate SMTP and call sendmail()."""
+        mock_server = MagicMock()
+        mock_smtp_cls.return_value.__enter__ = MagicMock(return_value=mock_server)
+        mock_smtp_cls.return_value.__exit__ = MagicMock(return_value=False)
 
         result = sender.send_email(html_content=sample_html, subject="Daily Report")
 
-        assert result == 202
+        mock_smtp_cls.assert_called_once_with("smtp.gmail.com", 587)
+        mock_server.starttls.assert_called_once()
+        mock_server.login.assert_called_once_with("sender@gmail.com", "app-password")
+        mock_server.sendmail.assert_called_once()
+        assert result == 200
 
-    @patch("src.email_sender.SendGridAPIClient")
-    def test_send_email_api_failure_raises_exception(
+    @patch("smtplib.SMTP")
+    def test_send_email_composes_message_correctly(
         self,
-        mock_client_cls: MagicMock,
+        mock_smtp_cls: MagicMock,
         sender: EmailSender,
         sample_html: str,
     ) -> None:
-        """If SendGrid send() raises an exception, send_email should propagate it."""
-        mock_client = MagicMock()
-        from python_http_client.exceptions import HTTPError
+        """The email message should have correct to, from, subject, and HTML content."""
+        mock_server = MagicMock()
+        mock_smtp_cls.return_value.__enter__ = MagicMock(return_value=mock_server)
+        mock_smtp_cls.return_value.__exit__ = MagicMock(return_value=False)
 
-        # HTTPError can take 4 args: status_code, reason, body, headers
-        mock_client.send.side_effect = HTTPError(400, "Bad Request", b"{}", {})
-        mock_client_cls.return_value = mock_client
+        sender.send_email(html_content=sample_html, subject="Daily Report")
 
-        with pytest.raises(HTTPError):
-            sender.send_email(html_content=sample_html, subject="Daily Report")
+        # Extract the message from sendmail call
+        call_args = mock_server.sendmail.call_args
+        from_addr = call_args[0][0]
+        to_addrs = call_args[0][1]
+        msg_string = call_args[0][2]
 
-    def test_send_email_without_api_key_raises(
+        assert from_addr == "sender@gmail.com"
+        assert to_addrs == ["recipient@example.com"]
+        assert "Subject: Daily Report" in msg_string
+        assert "From: sender@gmail.com" in msg_string
+        assert "To: recipient@example.com" in msg_string
+        assert sample_html in msg_string
+
+    # ------------------------------------------------------------------ #
+    #  Missing credentials
+    # ------------------------------------------------------------------ #
+
+    def test_send_email_without_username_raises(
         self,
         sample_html: str,
     ) -> None:
-        """When sendgrid_api_key is missing, send_email should raise ValueError."""
+        """When smtp_username is missing, send_email should raise ValueError."""
         cfg = Config(
             email_recipient="recipient@example.com",
-            email_from="snowshoe-bot@example.com",
-            smtp_provider="sendgrid",
-            sendgrid_api_key=None,
+            email_from="sender@gmail.com",
+            smtp_host="smtp.gmail.com",
+            smtp_port=587,
+            smtp_username=None,
+            smtp_password="app-password",
+            smtp_use_tls=True,
             dry_run=False,
         )
         sender = EmailSender(cfg)
 
-        with pytest.raises(ValueError, match="SendGrid API key"):
+        with pytest.raises(ValueError, match="SMTP credentials"):
             sender.send_email(html_content=sample_html, subject="Daily Report")
 
-    # ------------------------------------------------------------------ #
-    #  Unsupported provider
-    # ------------------------------------------------------------------ #
-
-    def test_unsupported_provider_raises(self, sample_html: str) -> None:
-        """An unsupported smtp_provider should raise ValueError on send."""
+    def test_send_email_without_password_raises(
+        self,
+        sample_html: str,
+    ) -> None:
+        """When smtp_password is missing, send_email should raise ValueError."""
         cfg = Config(
             email_recipient="recipient@example.com",
-            email_from="snowshoe-bot@example.com",
-            smtp_provider="fax_machine",
-            sendgrid_api_key="SG.test-key",
+            email_from="sender@gmail.com",
+            smtp_host="smtp.gmail.com",
+            smtp_port=587,
+            smtp_username="sender@gmail.com",
+            smtp_password=None,
+            smtp_use_tls=True,
             dry_run=False,
         )
         sender = EmailSender(cfg)
 
-        with pytest.raises(ValueError, match="Unsupported email provider"):
+        with pytest.raises(ValueError, match="SMTP credentials"):
             sender.send_email(html_content=sample_html, subject="Daily Report")
+
+    # ------------------------------------------------------------------ #
+    #  SMTP errors
+    # ------------------------------------------------------------------ #
+
+    @patch("smtplib.SMTP")
+    def test_send_email_smtp_failure_raises(
+        self,
+        mock_smtp_cls: MagicMock,
+        sender: EmailSender,
+        sample_html: str,
+    ) -> None:
+        """If SMTP sendmail raises an exception, send_email should propagate it."""
+        import smtplib
+
+        mock_server = MagicMock()
+        mock_server.sendmail.side_effect = smtplib.SMTPException("Connection refused")
+        mock_smtp_cls.return_value.__enter__ = MagicMock(return_value=mock_server)
+        mock_smtp_cls.return_value.__exit__ = MagicMock(return_value=False)
+
+        with pytest.raises(smtplib.SMTPException, match="Connection refused"):
+            sender.send_email(html_content=sample_html, subject="Daily Report")
+
+    # ------------------------------------------------------------------ #
+    #  Non-TLS SMTP
+    # ------------------------------------------------------------------ #
+
+    @patch("smtplib.SMTP")
+    def test_send_email_without_tls(
+        self,
+        mock_smtp_cls: MagicMock,
+        sample_html: str,
+    ) -> None:
+        """When smtp_use_tls is False, starttls should not be called."""
+        cfg = Config(
+            email_recipient="recipient@example.com",
+            email_from="sender@example.com",
+            smtp_host="localhost",
+            smtp_port=25,
+            smtp_username="sender@example.com",
+            smtp_password="password",
+            smtp_use_tls=False,
+            dry_run=False,
+        )
+        sender = EmailSender(cfg)
+
+        mock_server = MagicMock()
+        mock_smtp_cls.return_value.__enter__ = MagicMock(return_value=mock_server)
+        mock_smtp_cls.return_value.__exit__ = MagicMock(return_value=False)
+
+        sender.send_email(html_content=sample_html, subject="Daily Report")
+
+        mock_server.starttls.assert_not_called()
+        mock_server.login.assert_called_once()

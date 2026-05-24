@@ -1,74 +1,73 @@
-"""Email delivery via SendGrid (primary) with dry-run support."""
+"""Email delivery via SMTP (Gmail, etc.) with dry-run support."""
 
 from __future__ import annotations
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import Optional
 
 from loguru import logger
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Content, Email, Mail, Subject, To
 
 from src.config import Config
 
 
 class EmailSender:
-    """Sends HTML emails using SendGrid or logs them in dry-run mode."""
+    """Sends HTML emails using SMTP or logs them in dry-run mode."""
 
     def __init__(self, config: Config) -> None:
         """Initialise with application configuration.
 
         Args:
-            config: Application configuration including email credentials.
+            config: Application configuration including SMTP credentials.
         """
         self.config = config
-        self.sendgrid_api_key = config.sendgrid_api_key
 
     def send_email(self, html_content: str, subject: str) -> Optional[int]:
-        """Send an HTML email via the configured provider.
-
-        In dry-run mode the email is logged instead of sent.
+        """Send an HTML email via SMTP.
 
         Args:
             html_content: Full HTML body of the email.
             subject: Email subject line.
 
         Returns:
-            HTTP status code if sent successfully, or ``None`` in dry-run mode.
+            200 if sent successfully, or ``None`` if credentials are missing.
 
         Raises:
-            ValueError: If the email provider is unsupported or API key is missing.
-            Exception: Re-raises any SendGrid API error.
+            ValueError: If SMTP credentials are not configured.
+            smtplib.SMTPException: Re-raises any SMTP error.
         """
-        if self.config.smtp_provider == "sendgrid":
-            return self._send_via_sendgrid(html_content, subject)
+        if not self.config.smtp_username or not self.config.smtp_password:
+            raise ValueError(
+                "SMTP credentials not configured. "
+                "Set SMTP_USERNAME and SMTP_PASSWORD environment variables."
+            )
 
-        raise ValueError(f"Unsupported email provider: {self.config.smtp_provider}")
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = self.config.email_from
+        msg["To"] = self.config.email_recipient
 
-    def _send_via_sendgrid(self, html_content: str, subject: str) -> int:
-        """Deliver email through SendGrid.
+        # Attach HTML content
+        msg.attach(MIMEText(html_content, "html"))
 
-        Args:
-            html_content: Full HTML body.
-            subject: Email subject.
-
-        Returns:
-            HTTP status code from the SendGrid API response.
-
-        Raises:
-            ValueError: If the SendGrid API key is not configured.
-        """
-        if not self.sendgrid_api_key:
-            raise ValueError("SendGrid API key is required but not configured.")
-
-        sg = SendGridAPIClient(api_key=self.sendgrid_api_key)
-
-        message = Mail(
-            from_email=Email(self.config.email_from),
-            to_emails=To(self.config.email_recipient),
-            subject=Subject(subject),
-            html_content=Content("text/html", html_content),
-        )
-
-        response = sg.send(message)
-        logger.info("Email sent via SendGrid: status=%s", response.status_code)
-        return response.status_code
+        try:
+            with smtplib.SMTP(self.config.smtp_host, self.config.smtp_port) as server:
+                if self.config.smtp_use_tls:
+                    server.starttls()
+                server.login(self.config.smtp_username, self.config.smtp_password)
+                server.sendmail(
+                    self.config.email_from,
+                    [self.config.email_recipient],
+                    msg.as_string(),
+                )
+            logger.info(
+                "Email sent via SMTP ({host}:{port}) to {recipient}",
+                host=self.config.smtp_host,
+                port=self.config.smtp_port,
+                recipient=self.config.email_recipient,
+            )
+            return 200
+        except smtplib.SMTPException as exc:
+            logger.error("SMTP error: {}", exc)
+            raise
