@@ -53,7 +53,7 @@ class Config(BaseSettings):
 
     # Email
     email_recipient: str = Field(..., description="Primary recipient email address.")
-    email_from: str = Field(default="snowshoe-bot@example.com")
+    email_from: str = Field(default="your-email@gmail.com")
     smtp_host: str = Field(default="smtp.gmail.com", description="SMTP server hostname.")
     smtp_port: int = Field(default=587, description="SMTP server port.")
     smtp_username: Optional[str] = Field(default=None, description="SMTP username (usually your email address).")

@@ -31,7 +31,10 @@ class EmailSender:
             subject: Email subject line.
 
         Returns:
-            200 if sent successfully, or ``None`` if credentials are missing.
+            200 if sent successfully.
+
+        Raises:
+            ValueError: If SMTP credentials are not configured.
 
         Raises:
             ValueError: If SMTP credentials are not configured.

@@ -13,4 +13,4 @@ ENV PYTHONPATH=/app
 ENV DATA_PATH=/app/data/properties.json
 
 # Run once and exit (use host cron to schedule)
-CMD ["python", "src/main.py"]
+CMD ["python", "-m", "src.main"]

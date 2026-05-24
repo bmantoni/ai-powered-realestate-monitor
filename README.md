@@ -144,9 +144,9 @@ All settings are controlled via environment variables (or `.env`):
    - `EMAIL_RECIPIENT`
    - `SMTP_USERNAME` (your Gmail address)
    - `SMTP_PASSWORD` (your Gmail App Password — not your regular password!)
-   - `EMAIL_FROM` (optional, defaults to SMTP_USERNAME)
+   - `EMAIL_FROM` (optional, defaults to `your-email@gmail.com`)
    - `SOURCES` (optional)
-3. The workflow (`.github/workflows/daily-report.yml`) runs daily at 8 AM ET and uploads the JSON state as an artifact for persistence.
+3. The workflow (`.github/workflows/daily-report.yml`) runs daily at 8 AM UTC and uploads the JSON state as an artifact for persistence.
 
 **Note:** You must use a Gmail App Password, not your regular Gmail password. Generate one at https://myaccount.google.com/apppasswords.
 
@@ -191,7 +191,7 @@ snowshoe-condo-bot/
 │   ├── storage.py                       # JSON persistence
 │   ├── filter.py                        # Criteria matching
 │   ├── email_generator.py               # Jinja2 HTML rendering
-│   ├── email_sender.py                  # SendGrid delivery
+│   ├── email_sender.py                  # SMTP delivery (Gmail)
 │   └── utils.py                         # Retry & circuit breaker utilities
 ├── templates/
 │   └── email.html                       # Email template
@@ -242,7 +242,7 @@ pytest --cov=src --cov-report=term-missing
 ## Cost Estimate
 
 - **AI Enrichment** – ~$0.005 per run (view classification for ~5 matching properties)
-- **Email** – SendGrid free tier includes 100 emails/day
+- **Email** – Gmail SMTP: Free (within Gmail sending limits)
 
 ## License
 

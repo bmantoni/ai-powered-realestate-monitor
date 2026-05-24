@@ -36,7 +36,7 @@
 │           │                                                  │
 │           ▼                                                  │
 │  ┌──────────────────┐                                        │
-│  │  SMTP SendGrid   │                                        │
+│  │  SMTP (Gmail)    │                                        │
 │  └──────────────────┘                                        │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
@@ -56,7 +56,7 @@ Key architectural decisions:
 - **HTML Parsing**: `beautifulsoup4` for fast structured extraction from known sources
 - **Data Processing**: `pydantic` for validation
 - **Templating**: `jinja2` for HTML email generation
-- **Email Delivery**: `sendgrid` (primary; SES and Gmail documented but not yet implemented)
+- **Email Delivery**: `smtplib` (Gmail SMTP)
 - **AI Integration**: `google-generativeai` (Gemini) or OpenAI-compatible client for Kimi
 - **Persistence**: `json` (single file only)
 - **Scheduling**: GitHub Actions `schedule` event or local cron
@@ -506,13 +506,13 @@ SOURCES=https://www.firsttracts.com/real-estate/our-listings
 pip install -r requirements.txt
 
 # Run with live data, no email
-DRY_RUN=true python src/main.py
+DRY_RUN=true python -m src.main
 
 # Run with AI disabled for fast testing
-SKIP_AI=true DRY_RUN=true python src/main.py
+SKIP_AI=true DRY_RUN=true python -m src.main
 
 # Full run with email
-python src/main.py
+python -m src.main
 ```
 
 ### Test Fixtures
@@ -578,7 +578,7 @@ name: Daily Snowshoe Condo Report
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Daily at 8 AM ET
+    - cron: '0 8 * * *'  # Daily at 8 AM UTC
   workflow_dispatch:      # Allow manual runs
 
 jobs:
@@ -607,10 +607,12 @@ jobs:
       - name: Run report generator
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           SOURCES: ${{ secrets.SOURCES }}
-        run: python src/main.py
+        run: python -m src.main
       
       - name: Upload updated state
         uses: actions/upload-artifact@v4
@@ -643,7 +645,7 @@ ENV PYTHONPATH=/app
 ENV DATA_PATH=/app/data/properties.json
 
 # Run once and exit (use host cron to schedule)
-CMD ["python", "src/main.py"]
+CMD ["python", "-m", "src.main"]
 ```
 
 ## 12. Implementation Phases
@@ -675,7 +677,7 @@ CMD ["python", "src/main.py"]
 
 ### Phase 5: Email & Deployment
 - [x] Create Jinja2 email template
-- [x] Implement SendGrid integration
+- [x] Implement SMTP integration (Gmail)
 - [x] Add local HTML report generation
 - [x] Test email rendering
 - [x] Set up GitHub Actions workflow

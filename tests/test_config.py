@@ -55,10 +55,10 @@ class TestConfigDefaults:
         assert config.ai_provider == "gemini"
 
     def test_default_email_from(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Default sender email is snowshoe-bot@example.com."""
+        """Default sender email is your-email@gmail.com."""
         monkeypatch.setenv("EMAIL_RECIPIENT", "test@example.com")
         config = Config()
-        assert config.email_from == "snowshoe-bot@example.com"
+        assert config.email_from == "your-email@gmail.com"
 
     def test_default_smtp_settings(self, clean_env: None, monkeypatch: pytest.MonkeyPatch) -> None:
         """Default SMTP settings are for Gmail."""
