@@ -35,9 +35,6 @@ class EmailSender:
 
         Raises:
             ValueError: If SMTP credentials are not configured.
-
-        Raises:
-            ValueError: If SMTP credentials are not configured.
             smtplib.SMTPException: Re-raises any SMTP error.
         """
         if not self.config.smtp_username or not self.config.smtp_password:
@@ -55,7 +52,7 @@ class EmailSender:
         msg.attach(MIMEText(html_content, "html"))
 
         try:
-            with smtplib.SMTP(self.config.smtp_host, self.config.smtp_port) as server:
+            with smtplib.SMTP(self.config.smtp_host, self.config.smtp_port, timeout=30) as server:
                 if self.config.smtp_use_tls:
                     server.starttls()
                 server.login(self.config.smtp_username, self.config.smtp_password)

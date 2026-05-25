@@ -6,7 +6,7 @@ import hashlib
 import json
 import re
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 
 from src.models import Property
@@ -111,7 +111,7 @@ class AIScraper:
         response = await self._ai.generate_json(prompt)
 
         listings: list[Property] = []
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         source_name = _extract_source_name(source_url)
 
         for item in response:

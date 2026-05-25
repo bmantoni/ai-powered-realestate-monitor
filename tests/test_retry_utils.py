@@ -34,7 +34,10 @@ class TestRetryWithBackoff:
         """When the function fails then succeeds, retries should occur."""
         mock_fn = AsyncMock(side_effect=[RuntimeError("fail 1"), RuntimeError("fail 2"), "success"])
 
-        result = await retry_with_backoff(mock_fn, max_retries=3, base_delay=0.01)
+        result = await retry_with_backoff(
+            mock_fn, max_retries=3, base_delay=0.01,
+            retryable_exceptions=(RuntimeError,)
+        )
 
         assert result == "success"
         assert mock_fn.call_count == 3
@@ -45,7 +48,10 @@ class TestRetryWithBackoff:
         mock_fn = AsyncMock(side_effect=RuntimeError("persistent failure"))
 
         with pytest.raises(RuntimeError, match="persistent failure"):
-            await retry_with_backoff(mock_fn, max_retries=2, base_delay=0.01)
+            await retry_with_backoff(
+                mock_fn, max_retries=2, base_delay=0.01,
+                retryable_exceptions=(RuntimeError,)
+            )
 
         assert mock_fn.call_count == 2
 
@@ -79,7 +85,8 @@ class TestRetryWithBackoff:
             delays.append(delay)
 
         result = await retry_with_backoff(
-            mock_fn, max_retries=3, base_delay=0.1, _sleep=tracking_sleep
+            mock_fn, max_retries=3, base_delay=0.1, _sleep=tracking_sleep,
+            retryable_exceptions=(RuntimeError,)
         )
 
         assert result == "success"
@@ -95,7 +102,10 @@ class TestRetryWithBackoff:
         async def tracking_sleep(delay: float) -> None:
             delays.append(delay)
 
-        await retry_with_backoff(mock_fn, max_retries=3, base_delay=0.05, _sleep=tracking_sleep)
+        await retry_with_backoff(
+            mock_fn, max_retries=3, base_delay=0.05, _sleep=tracking_sleep,
+            retryable_exceptions=(RuntimeError,)
+        )
 
         assert len(delays) == 2
         assert delays[0] == pytest.approx(0.05, rel=1e-3)

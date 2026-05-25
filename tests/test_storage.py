@@ -39,12 +39,17 @@ class TestStorageLoad:
         assert "existing-001" in storage._data["properties"]
         assert len(storage._data["snapshots"]) == 1
 
-    def test_load_invalid_json_raises(self, temp_dir: Path) -> None:
-        """Loading a file with invalid JSON raises an exception."""
+    def test_load_invalid_json_creates_fresh(self, temp_dir: Path) -> None:
+        """Loading a file with invalid JSON creates a fresh structure and backs up the bad file."""
         filepath = temp_dir / "bad.json"
         filepath.write_text("not json")
-        with pytest.raises(Exception):  # json.JSONDecodeError
-            JsonStorage(str(filepath))
+        storage = JsonStorage(str(filepath))
+        # Should create fresh structure
+        assert storage._data["version"] == 1
+        assert storage._data["properties"] == {}
+        # Should backup the corrupted file
+        backup_files = list(temp_dir.glob("*.corrupted.*"))
+        assert len(backup_files) == 1
 
 
 # ---------------------------------------------------------------------------
@@ -304,12 +309,17 @@ class TestStorageEdgeCases:
         # The implementation does not guard against None, so this documents current behaviour
         assert storage.get_property("none-prop") is None
 
-    def test_load_empty_file_raises(self, temp_dir: Path) -> None:
-        """Loading an empty file raises JSONDecodeError."""
+    def test_load_empty_file_creates_fresh(self, temp_dir: Path) -> None:
+        """Loading an empty file creates a fresh structure and backs up the empty file."""
         filepath = temp_dir / "empty.json"
         filepath.write_text("")
-        with pytest.raises(Exception):
-            JsonStorage(str(filepath))
+        storage = JsonStorage(str(filepath))
+        # Should create fresh structure
+        assert storage._data["version"] == 1
+        assert storage._data["properties"] == {}
+        # Should backup the corrupted file
+        backup_files = list(temp_dir.glob("*.corrupted.*"))
+        assert len(backup_files) == 1
 
     def test_save_after_load_preserves_structure(self, populated_storage_file: Path, temp_dir: Path) -> None:
         """Saving after loading preserves the original file structure."""

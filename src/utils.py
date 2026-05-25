@@ -58,7 +58,7 @@ class CircuitBreaker:
             result = fn()
             self.record_success()
             return result
-        except Exception:
+        except (ConnectionError, TimeoutError, OSError):
             self.record_failure()
             raise
 
@@ -73,7 +73,7 @@ class CircuitBreaker:
                 result = await fn(*args, **kwargs)
                 self.record_success()
                 return result
-            except Exception:
+            except (ConnectionError, TimeoutError, OSError):
                 self.record_failure()
                 raise
 
@@ -88,7 +88,7 @@ async def retry_with_backoff(
     *args: Any,
     max_retries: int = 3,
     base_delay: float = 1.0,
-    retryable_exceptions: tuple[type[Exception], ...] = (Exception,),
+    retryable_exceptions: tuple[type[Exception], ...] = (ConnectionError, TimeoutError, OSError),
     _sleep: Callable[[float], Coroutine[Any, Any, None]] | None = None,
     **kwargs: Any,
 ) -> T:

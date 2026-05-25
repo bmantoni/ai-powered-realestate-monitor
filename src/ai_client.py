@@ -53,7 +53,10 @@ class GeminiAIClient(AIClient):
             text = text.split("```json")[1].split("```")[0]
         elif "```" in text:
             text = text.split("```")[1].split("```")[0]
-        return json.loads(text.strip())
+        try:
+            return json.loads(text.strip())
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"AI returned invalid JSON: {exc}\nResponse text: {text[:200]}...") from exc
 
     async def generate_text(self, prompt: str) -> str:
         self.call_count += 1

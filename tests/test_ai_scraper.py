@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 from unittest.mock import AsyncMock
 
@@ -216,9 +216,9 @@ class TestExtractListings:
         """Properties should have first_seen and last_updated set to now."""
         mock_ai_client.set_response(sample_ai_response)
 
-        before = datetime.utcnow()
+        before = datetime.now(timezone.utc)
         result = await scraper.extract_listings("<html></html>", "https://example.com/")
-        after = datetime.utcnow()
+        after = datetime.now(timezone.utc)
 
         prop = result[0]
         assert before <= prop.first_seen <= after

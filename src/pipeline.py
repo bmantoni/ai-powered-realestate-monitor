@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from statistics import median
 from typing import Any
 
@@ -134,7 +134,7 @@ class Pipeline:
             median_price = 0.0
 
         snapshot = DailySnapshot(
-            date=datetime.utcnow(),
+            date=datetime.now(timezone.utc),
             total_listings=total_listings,
             average_price=average_price,
             median_price=median_price,
@@ -146,7 +146,7 @@ class Pipeline:
         # ------------------------------------------------------------------
         # 7. Update last_run timestamp
         # ------------------------------------------------------------------
-        self.storage._data["last_run"] = datetime.utcnow().isoformat()
+        self.storage.set_last_run(datetime.now(timezone.utc).isoformat())
 
         # ------------------------------------------------------------------
         # 8. Persist

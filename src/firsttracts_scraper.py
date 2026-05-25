@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from bs4 import BeautifulSoup
@@ -119,7 +119,7 @@ def parse_listings_html(html: str, source_url: str) -> list[Property]:
     """
     soup = BeautifulSoup(html, "html.parser")
     source_name = _extract_source_name(source_url)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     listings: list[Property] = []
     
     # Find all property panels

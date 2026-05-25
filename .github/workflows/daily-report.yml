@@ -1,5 +1,9 @@
 name: Daily Snowshoe Condo Report
 
+permissions:
+  contents: read
+  actions: write  # For artifact upload/download
+
 on:
   schedule:
     - cron: '0 8 * * *'  # Daily at 8 AM ET

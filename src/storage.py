@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime, timedelta
+import tempfile
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
+
+from loguru import logger
 
 
 class JsonStorage:
@@ -19,14 +22,37 @@ class JsonStorage:
         """Load existing data or return a fresh structure."""
         if not os.path.exists(self.filepath):
             return {"version": 1, "last_run": None, "properties": {}, "snapshots": []}
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(self.filepath, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except json.JSONDecodeError as exc:
+            logger.error(
+                "Corrupted JSON file {} — backing up and starting fresh: {}",
+                self.filepath,
+                exc,
+            )
+            # Backup the corrupted file
+            backup_path = f"{self.filepath}.corrupted.{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+            os.rename(self.filepath, backup_path)
+            logger.info("Corrupted file backed up to {}", backup_path)
+            return {"version": 1, "last_run": None, "properties": {}, "snapshots": []}
 
     def save(self) -> None:
-        """Persist current state to disk."""
+        """Persist current state to disk atomically (temp file + rename)."""
         os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(self._data, f, indent=2, default=str)
+        dir_name = os.path.dirname(self.filepath) or "."
+        fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump(self._data, f, indent=2, default=str)
+            os.replace(temp_path, self.filepath)
+        except Exception:
+            # Clean up temp file on failure
+            try:
+                os.unlink(temp_path)
+            except OSError:
+                pass
+            raise
 
     def get_property(self, property_id: str) -> Optional[dict[str, Any]]:
         """Retrieve a single property by ID."""
@@ -51,18 +77,29 @@ class JsonStorage:
     def add_snapshot(self, snapshot: dict[str, Any]) -> None:
         """Append a daily snapshot and trim entries older than 90 days."""
         self._data["snapshots"].append(snapshot)
-        cutoff = datetime.utcnow() - timedelta(days=90)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=90)
 
         def _parse_date(d: Any) -> datetime:
             if isinstance(d, datetime):
+                # If naive, assume UTC for comparison with timezone-aware cutoff
+                if d.tzinfo is None:
+                    return d.replace(tzinfo=timezone.utc)
                 return d
-            return datetime.fromisoformat(d)
+            parsed = datetime.fromisoformat(d)
+            # If naive, assume UTC for comparison with timezone-aware cutoff
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed
 
         self._data["snapshots"] = [
             s
             for s in self._data["snapshots"]
             if _parse_date(s["date"]) > cutoff
         ]
+
+    def set_last_run(self, timestamp: str) -> None:
+        """Update the last_run timestamp."""
+        self._data["last_run"] = timestamp
 
     def get_all_properties(self) -> Dict[str, dict[str, Any]]:
         """Return all stored properties keyed by ID."""
