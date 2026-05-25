@@ -142,6 +142,7 @@ Desktop.ini
 # Project-specific runtime data
 data/*.json
 !data/.gitkeep
+!data/properties.json
 logs/
 reports/
 

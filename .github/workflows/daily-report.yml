@@ -1,8 +1,8 @@
 name: Daily Snowshoe Condo Report
 
 permissions:
-  contents: read
-  actions: write  # For artifact upload/download
+  contents: write
+  actions: write  # For log artifacts
 
 on:
   schedule:
@@ -25,13 +25,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Download previous state
-        uses: actions/download-artifact@v4
-        with:
-          name: property-data
-          path: data/
-        continue-on-error: true
-
       - name: Run report generator
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -41,14 +34,19 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SOURCES: ${{ secrets.SOURCES }}
         run: python -m src.main
 
-      - name: Upload updated state
-        uses: actions/upload-artifact@v4
-        with:
-          name: property-data
-          path: data/properties.json
+      - name: Commit and push updated state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/properties.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update property data [$(date -u +%Y-%m-%d)]"
+            git push
+          fi
 
       - name: Upload logs
         if: always()
