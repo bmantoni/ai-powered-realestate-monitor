@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_run": "2026-05-28T12:14:30.466193+00:00",
+  "last_run": "2026-05-28T12:23:45.758022+00:00",
   "properties": {
     "www_firsttracts_com_mls_property_cfm": {
       "id": "www_firsttracts_com_mls_property_cfm",
@@ -3506,6 +3506,15 @@
         "26612",
         "26331"
       ]
+    },
+    {
+      "date": "2026-05-28 12:23:45.757992+00:00",
+      "total_listings": 0,
+      "average_price": 0.0,
+      "median_price": 0.0,
+      "new_listings": [],
+      "price_changes": [],
+      "removed_listings": []
     }
   ]
 }
