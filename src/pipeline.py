@@ -67,6 +67,13 @@ class Pipeline:
                         listings = parse_listings_html(listings_html, page_url)
                     else:
                         listings = await self.scraper.extract_listings(listings_html, page_url)
+                    if not listings:
+                        logger.warning(
+                            "No listings parsed from {}. Full response length: {} chars. First 1000 chars: {}",
+                            page_url,
+                            len(listings_html),
+                            listings_html[:1000].replace('\n', ' '),
+                        )
                     logger.info(
                         "Extracted {} listings from {}",
                         len(listings),

@@ -125,6 +125,14 @@ def parse_listings_html(html: str, source_url: str) -> list[Property]:
     # Find all property panels
     panels = soup.find_all("div", class_="panel")
     
+    if not panels:
+        logger.warning(
+            "No .panel elements found in HTML from {}. HTML sample (first 800 chars): {}",
+            source_url,
+            html[:800].replace('\n', ' '),
+        )
+        return []
+    
     for panel in panels:
         # Skip non-property panels (like pagination panels)
         mls_number = panel.get("data-mlsnumber")

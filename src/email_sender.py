@@ -37,6 +37,11 @@ class EmailSender:
             ValueError: If SMTP credentials are not configured.
             smtplib.SMTPException: Re-raises any SMTP error.
         """
+        if not self.config.smtp_host:
+            raise ValueError(
+                "SMTP host not configured. "
+                "Set SMTP_HOST environment variable (e.g., smtp.gmail.com)."
+            )
         if not self.config.smtp_username or not self.config.smtp_password:
             raise ValueError(
                 "SMTP credentials not configured. "
@@ -52,9 +57,12 @@ class EmailSender:
         msg.attach(MIMEText(html_content, "html"))
 
         try:
-            with smtplib.SMTP(self.config.smtp_host, self.config.smtp_port, timeout=30) as server:
+            with smtplib.SMTP(timeout=30) as server:
+                server.connect(self.config.smtp_host, self.config.smtp_port)
+                server.ehlo()
                 if self.config.smtp_use_tls:
                     server.starttls()
+                    server.ehlo()
                 server.login(self.config.smtp_username, self.config.smtp_password)
                 server.sendmail(
                     self.config.email_from,
