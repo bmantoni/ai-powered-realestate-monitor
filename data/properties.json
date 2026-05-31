@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_run": "2026-05-30T09:49:07.414268+00:00",
+  "last_run": "2026-05-31T10:05:45.126692+00:00",
   "properties": {
     "www_firsttracts_com_mls_property_cfm": {
       "id": "www_firsttracts_com_mls_property_cfm",
@@ -44,7 +44,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250528120226926766000000-o.jpg"
       ],
       "description": "The one-of-a-kind HUTCH! These homes are ski-out on Cupp Run and rarely come to market! Located close to Applachian...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -69,7 +69,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260404174248148705000000-o.jpg"
       ],
       "description": "4.3 miles from the entrance to Snowshoe Mountain and set within Sunset Mountain Village, this luxury log home on 15...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -94,7 +94,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260512190827574388000000-o.jpg"
       ],
       "description": "Unlock a rare investment with this 9.8-acre parcel located near Snowshoe Mountain Resort. This is not just raw land; it...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -119,7 +119,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260430130044472254000000-o.jpg"
       ],
       "description": "WOW! Rarely listed 5BR/4.5BA end-unit home in Black Bear Crossing at Snowshoe! This spacious two-level residence is...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -144,7 +144,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250919154606576554000000-o.jpg"
       ],
       "description": "Lands End #10, 5 bedroom/3 bath plus a just completed separate guest studio apartment.\n2,256 sq/ft rental property,...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -169,7 +169,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260308171635230839000000-o.jpg"
       ],
       "description": "Views from this home of the famous sunsets from Snowshoe Mountain Resort, sunsets from this home. Spacious living area...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -194,7 +194,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250516150520646601000000-o.jpg"
       ],
       "description": "Mountain Harmony (lot #18) is a beautiful single family home located on North West Ridge Road. This home boasts...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -219,7 +219,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260519153239717292000000-o.jpg"
       ],
       "description": "Location, location, location!! It doesn't get any better than this at Snowshoe. ON the slopes where you can ski onto...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -244,7 +244,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260504195323028220000000-o.jpg"
       ],
       "description": "SLOPE SIDE 3 bedroom/2 bath BRIGHAM rated condominium residence, located DIRECTLY in front of the Ballhooter high speed...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -269,7 +269,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260307140741384874000000-o.jpg"
       ],
       "description": "This 5-bedroom Creekside Villa townhome is fully furnished, rental-ready, and comfortably sleeps up to 20 guests. Recent...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:48:27.290270",
       "last_updated": "2026-05-30 09:49:07.028171+00:00",
       "last_price": null,
@@ -294,7 +294,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251006180733040236000000-o.jpg"
       ],
       "description": "A Refined Mountain Retreat. Perched atop the sought-after Slatyridge neighborhood, this exquisite 4 bed, 3 bath log home...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -344,7 +344,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260323151904567630000000-o.jpg"
       ],
       "description": "Wonderful Creekside Villa with 2900 sq ft and 6 bedrooms. The complex has paved roads, parking, trash building and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -369,7 +369,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260415180401349884000000-o.jpg"
       ],
       "description": "Have you been waiting patiently for a home with acreage and NO HOA? Well, wait no more! This home is situated on over...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -394,7 +394,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260421231139360150000000-o.jpg"
       ],
       "description": "Beautiful setting from this very relaxing and private home. The covered porch of this home is pretty special. 2.46...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -419,7 +419,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250711114218541820000000-o.jpg"
       ],
       "description": "Build your mountain DREAM HOME on this SLOPE SIDE and Ski-IN/Ski-OUT home site. This lot sits at the end of the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -444,7 +444,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260130183912566466000000-o.jpg"
       ],
       "description": "Six-bedroom/4-bath home 4 acres +or- with an amazing mountain view! This beautiful six-bedroom home is in a prime...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -469,7 +469,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260311135140944723000000-o.jpg"
       ],
       "description": "FANTASTIC OPPORTUNITY: UNRESTRICTED AND ONLY 2 MILES TO THE ENTRANCE OF SNOWSHOE! A short 8 minute drive to the slopes...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -494,7 +494,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260522124010077963000000-o.jpg"
       ],
       "description": "SLOPE SIDE to the Whistlepunk GREEN ski trail. Build your DREAM HOME on this awesome, ski-in/out home site. This lot...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -519,7 +519,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260518190235271664000000-o.jpg"
       ],
       "description": "Treetop 12A is situated ideally atop Snowshoe mountain with the perfect blend of convenience and privacy. Just a short...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 17:55:08.189682",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -544,7 +544,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251205122055241207000000-o.jpg"
       ],
       "description": "This one is a jaw dropper! This contemporary mountain chic dream home will be SLOPE SIDE and SKI-IN/SKI-OUT, sitting...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -569,7 +569,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251205032747792129000000-o.jpg"
       ],
       "description": "Super Awesome NEW Construction at The Sanctuary at Snowshoe. This sleek four level mountain contemporary residence has...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -594,7 +594,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260505202151758605000000-o.jpg"
       ],
       "description": "Mountain Mama! A jaw dropping single family residence that sits tucked in the trees as the last house on North West...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -619,7 +619,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260508203156634667000000-o.jpg"
       ],
       "description": "Black Bear Crossing #2 is a very well kept and nicely appointed 5 bedroom/4.5 bath. This fully furnished residence is...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -644,7 +644,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260105132129185473000000-o.jpg"
       ],
       "description": "Premier custom home at The Sanctuary. This elegant retreat sits across from the new Green ski-out trail called Sebway. ...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -669,7 +669,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260420213644693957000000-o.jpg"
       ],
       "description": "Beautiful Snowshoe Chalet Retreat on 4.4 Private Acres\nMinutes from Snowshoe Resort, this spacious 5BR + loft, 3BA...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.247028",
       "last_updated": "2026-05-30 09:49:06.920246+00:00",
       "last_price": null,
@@ -694,7 +694,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251107192751117575000000-o.jpg"
       ],
       "description": "This slopeside lot, known as SS4, sits just steps from the Sawmill ski slope and the new access trail to Sawmill and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -744,7 +744,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260211135603468605000000-o.jpg"
       ],
       "description": "Ski-in/ski-out 2-bedroom, 2-bath Whistlepunk.\nFully furnished, log fireplace, full kitchen, washer/dryer. Great...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -769,7 +769,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260128154202655766000000-o.jpg"
       ],
       "description": "This well-maintained 4-bedroom, 2.5-bath single-family home is located in the desirable Hunters Ridge development at the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -794,7 +794,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260403161413659707000000-o.jpg"
       ],
       "description": "Two side-by-side Mountain Lodge condos, a 1 bedroom and 2 bedroom. Combine these units into a 4 bed/3 bath. and create a...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -819,7 +819,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260421180525847877000000-o.jpg"
       ],
       "description": "Welcome to this true 2-bedroom, 2-bath residence in sought-after Allegheny Springs, offering picturesque village views...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -844,7 +844,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260404144942646773000000-o.jpg"
       ],
       "description": "Combine condos #212 and #214 and have a 4-5 bedroom rental machine! Slopeside, these side-by-side condos; a 1 BR and a 2...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -869,7 +869,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251107190743353305000000-o.jpg"
       ],
       "description": "Build your dream home at Snowshoe! This lot in The Sanctuary neighborhood sits just steps from the Sawmill ski trail and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -894,7 +894,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250317170010057470000000-o.jpg"
       ],
       "description": "RARE Ski-In, Ski-Out 3-Bedroom Condo in the Heart of Snowshoe Village!\nDon't miss this incredible opportunity to own a...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -919,7 +919,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251212190648676609000000-o.jpg"
       ],
       "description": "This beautifully updated 2-bedroom, 2-bath condo at Rimfire Lodge offers 894 sq ft of comfort and convenience in the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.312437",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -944,7 +944,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250418143832599584000000-o.jpg"
       ],
       "description": "Motivated Seller! 5 bed/3 bath mountain getaway. This 2,894 sq/ft home was built in 2004 in the Slatyridge neighborhood....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.121405+00:00",
       "last_price": null,
@@ -969,7 +969,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260209165300036271000000-o.jpg"
       ],
       "description": "Nestled in the heart of Snowshoe Mountain Village, this 2-bedroom, 2-bathroom Highland House condo combines mountain...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -994,7 +994,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260313183648990029000000-o.jpg"
       ],
       "description": "Located on Hole #7 of the award-winning Raven Golf Course, this 3BR + loft, 2BA log townhome is the perfect year-round...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1019,7 +1019,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260318210929654347000000-o.jpg"
       ],
       "description": "Beautifully renovated 2 bed, 2 bath Rimfire condo featuring a new kitchen, flooring, furniture, and upgraded baths....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1044,7 +1044,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260416162020485479000000-o.jpg"
       ],
       "description": "''This inviting Leatherbark 3 bedroom, 2 bathroom condo offers a fully equipped kitchen, cozy living room, two full...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1069,7 +1069,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260312182059125615000000-o.jpg"
       ],
       "description": "Ultra-rare 2BR/2BA Powderidge condo in the desirable flat configuration, offering true one-level living. Unlike the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1094,7 +1094,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260212152702346870000000-o.jpg"
       ],
       "description": "This 2 Bedroom Soaring Eagle Home is Mountain Living at its finest with this amazing beautifully furnished Ski- in /Ski...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1119,7 +1119,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260213162912303153000000-o.jpg"
       ],
       "description": "BRIGHAM COLLECTION in Snowshoe's Premier development ~ ski in/out with an unbelievable WOW-factor Hearth Room and an...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1144,7 +1144,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260507152326587039000000-o.jpg"
       ],
       "description": "Welcome to Leatherbark 302A, a spacious 3BR/1BA condo at Snowshoe Mountain offering the perfect blend of comfort,...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1169,7 +1169,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260505210658504327000000-o.jpg"
       ],
       "description": "Incredibly well kept 3 bedroom/2 bath at The Summit. This residence is an end unit, so it has 3 extra windows, and it...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.334719",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1194,7 +1194,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260521163723825234000000-o.jpg"
       ],
       "description": "Looking for VIEWS? No need to choose mountain views or slope views as this condo offers both! Experience the ultimate...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.168331+00:00",
       "last_price": null,
@@ -1219,7 +1219,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260401220854629267000000-o.jpg"
       ],
       "description": "Experience true slope side living at Soaring Eagle Lodge in this well-kept 2 bed / 2 bath condo located on the same...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1244,7 +1244,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251111192746226402000000-o.jpg"
       ],
       "description": "Build your MOUNTAIN DREAM HOME on LOT #2 at Forever Wild. This home site is ideally located at the top of the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1269,7 +1269,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251226003622453218000000-o.jpg"
       ],
       "description": "Welcome to this beautifully appointed Soaring Eagle two-bedroom condo, sold fully furnished and move-in ready. Located...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1294,7 +1294,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260220163947608334000000-o.jpg"
       ],
       "description": "Slopeside 2BR/2BA corner condo in Expedition Station, located in The Village at Snowshoe. This 772 sq ft retreat...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1319,7 +1319,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260115145131576582000000-o.jpg"
       ],
       "description": "Enjoy peaceful lake views from your private, stand-alone deck in this 2-bedroom, 2-bath Mountain Lodge end unit. Located...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1344,7 +1344,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260312195658182654000000-o.jpg"
       ],
       "description": "Slope and lift views from this ski in/ski out 2 bed/2 bath Mountain Lodge. Featuring the preferred Davos floorplan, this...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1369,7 +1369,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260323203053139869000000-o.jpg"
       ],
       "description": "Slopeside 2 bed/2 bath Mountain Lodge. Innsbrook floorplan, this condo can be configured to sleep 12 if desired. 2 full...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1394,7 +1394,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260521164907526098000000-o.jpg"
       ],
       "description": "Reduced $10,000! Very RARE one bedroom plus LOFT home located across the road from Cupp Run! Kitchen, Flooring and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1419,7 +1419,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260311192835212462000000-o.jpg"
       ],
       "description": "One of the most conveniently located condos in the Mountain Lodge building at Snowshoe! Unit #103 sits at the end of the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.380316",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1444,7 +1444,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250103121539943614000000-o.jpg"
       ],
       "description": "Wonderfully kept, TOP FLOOR, one bedroom/one bath at The Seneca. This delightful home has several upgrades to include...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.214957+00:00",
       "last_price": null,
@@ -1469,7 +1469,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260227221022581990000000-o.jpg"
       ],
       "description": "Amazing slope side Brigham collection1-bedroom Highland House condo. Sold fully furnished and rental ready. This one is...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1494,7 +1494,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260426115913271868000000-o.jpg"
       ],
       "description": "SUPER-COZY! 2 bedroom and 2 bathroom condo in Mountain Lodge. This unit is great for couples or families. The Master...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1519,7 +1519,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250728154514955559000000-o.jpg"
       ],
       "description": "Escape to comfort and convenience in this charming 1-bedroom, 1-bathroom condo located in Allegheny Springs at Snowshoe...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1544,7 +1544,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260209164205858366000000-o.jpg"
       ],
       "description": "Fully furnished and rental-ready Mountain Lodge 2-bedroom offered at a great price. This third-floor unit in the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1569,7 +1569,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260421181737639680000000-o.jpg"
       ],
       "description": "Experience easy mountain living in this inviting 1-bedroom, 1-bath condo in Allegheny Springs, perfectly positioned with...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1594,7 +1594,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260327000028781658000000-o.jpg"
       ],
       "description": "Just what you have been waiting for: SHAMROCK condo! Shamrock 21A is your 609 sq. ft. mountain retreat in a perfect...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1619,7 +1619,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260324170832645860000000-o.jpg"
       ],
       "description": "Escape to the mountains in this inviting 2 bedroom, 2 bath condo at Snowcrest on Snowshoe Mountain. Perched high above...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1644,7 +1644,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260206204454963624000000-o.jpg"
       ],
       "description": "Completely remodeled, ski in/ski out Silver Creek 2-bedroom, 1-bath condo offering comfort, style, and convenience. This...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1669,7 +1669,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250705181343843710000000-o.jpg"
       ],
       "description": "Cozy and full of charm, this 1-bedroom, 1-bathroom Highland House retreat offers the perfect year-round mountain escape....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.401868",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -1694,7 +1694,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260429142514788175000000-o.jpg"
       ],
       "description": "Welcome to Highland House 117, a charming 1-bedroom, 1-bath condo located in the heart of Snowshoe Village. Listed at...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1719,7 +1719,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260328194733600533000000-o.jpg"
       ],
       "description": "Mountain Crest #35 is a beautifully upgraded top-floor condo located at Snowshoe Mountain Resort. This inviting mountain...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1744,7 +1744,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250913194639073911000000-o.jpg"
       ],
       "description": "Price reduced $5000. Just a few steps from the slopes this spacious Brigham rated 1-bedroom, 1-bath turn- key rental...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1769,7 +1769,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250603033127523211000000-o.jpg"
       ],
       "description": "Main level FULL SIZED studio at Allegheny Springs. This fully furnished condo has a full kitchen, fireplace, balcony...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1794,7 +1794,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260405162856689520000000-o.jpg"
       ],
       "description": "THIS is an extraordinary opportunity to own 10.87 acres within 3 miles of Snowshoe Resort's entrance. These gorgeous...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1819,7 +1819,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260406164947140500000000-o.jpg"
       ],
       "description": "Slopeside one bedroom one bathroom condo with clear views of the slopes and mountains. Also a great spot to watch...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1844,7 +1844,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251215154535074607000000-o.jpg"
       ],
       "description": "Amazing 1.02-acre lot with million-dollar views of the mountains, valley, and breathtaking sunsets that will last...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1869,7 +1869,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250925233852378275000000-o.jpg"
       ],
       "description": "VERY well kept one bedroom/one bath CORNER unit at RimFire Lodge. Located right in the heart of the Village at...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1894,7 +1894,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260430125143605781000000-o.jpg"
       ],
       "description": "Experience the perfect mountain getaway in this inviting 1 bedroom, 1 bath condo located in Rimfire Lodge at Snowshoe...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -1919,7 +1919,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260305004139513713000000-o.jpg"
       ],
       "description": "PRICE REDUCED almost $10,000 making this the lowest price 1-bedroom in the Central Village of Snowshoe. Nestled in the...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.423481",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -1944,7 +1944,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260115170807306486000000-o.jpg"
       ],
       "description": "Welcome to Mountain Lodge 340! Located on the top floor with a direct view of the slopes and Ballhooter lift, this...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -1969,7 +1969,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260508155855812081000000-o.jpg"
       ],
       "description": "Mountain Lodge 174 is a cozy 1-bedroom, 1-bathroom ski-in/ski-out condo located at the top of Snowshoe Mountain Resort,...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -1994,7 +1994,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20241015162426253649000000-o.jpg"
       ],
       "description": "Contractors Dream! Or anyone desiring a larger parcel close to the resort with no restrictions. 3.7 acres located above...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2019,7 +2019,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251125232405454258000000-o.jpg"
       ],
       "description": "Very well kept RimFire one bedroom/one bathroom. This condo is fully furnished and tastefully decorated. It has a full...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2069,7 +2069,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251219133431714307000000-o.jpg"
       ],
       "description": "Beautifully remodeled Brigham Collection Studio! Vaulted ceilings, Granite Counters. Ski-in-Ski-Out, Village Central....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2094,7 +2094,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260323223901498128000000-o.jpg"
       ],
       "description": "Beautifully remodeled Studio! Brigham Collection. Granite Counters. Ski-in-Ski-Out, Village Central. The building offers...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2119,7 +2119,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250917162442232437000000-o.jpg"
       ],
       "description": "REDUCED $10,000!! Recently renovated 1 bedroom within the Whistlepunk community. This opportunities are fairly rare as...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2144,7 +2144,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20250917164403447107000000-o.jpg"
       ],
       "description": "REDUCED $10,000!!! 1 Bedroom recently renovated Whistlepunk home, located across the street from Western Territory and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2169,7 +2169,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260509133534935992000000-o.jpg"
       ],
       "description": "Wake up to breathtaking sunrise views from this inviting Snowcrest 1-bed/1-bath condo, featuring a private porch and...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.444752",
       "last_updated": "2026-05-30 09:49:07.355346+00:00",
       "last_price": null,
@@ -2194,7 +2194,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260319183146570306000000-o.jpg"
       ],
       "description": "Remodeled lake view 1 bedroom Mountain Lodge. New kitchen, countertops, cabinets, appliances, furniture and more....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2219,7 +2219,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260323201206393023000000-o.jpg"
       ],
       "description": "Slopeside 1 bedroom Mountain Lodge. Featuring enlarged bathroom and reconfigured kitchen. New porch looks over...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2244,7 +2244,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260324103524352537000000-o.jpg"
       ],
       "description": "Amazing opportunity to buy a Seneca studio just steps from the ski slopes. These condos rarely come on the market....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2269,7 +2269,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260112225112023026000000-o.jpg"
       ],
       "description": "Immaculate 1 bed/1 bath Snowcrest condo, fully upgraded and rental ready. Sleeps 7! Recent improvements include newer...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2294,7 +2294,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260519203051621067000000-o.jpg"
       ],
       "description": "There are only four of these units in the building, and they rarely come on the market. This beautiful, spacious,...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2319,7 +2319,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260502201439136929000000-o.jpg"
       ],
       "description": "This Ridgewood loft condo is located on the top floor at the end, providing additional windows and natural light. This...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2344,7 +2344,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260319173448840529000000-o.jpg"
       ],
       "description": "Nicely updated 1 bed/1 bath sunset view Mountain Lodge. All new kitchen, new flooring, lighting, furniture. Electric...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2369,7 +2369,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251221211447299690000000-o.jpg"
       ],
       "description": "Village Central Allegheny Springs Studio\nBuilding features ski-in/ski-out slope-side ski lockers/ Mountain bike...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2394,7 +2394,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20251220175510491296000000-o.jpg"
       ],
       "description": "Third floor unit means LESS noise! Lot's of owner upgrades - this unit is rental ready for the 2025/2026 Season. 1BR/1BA...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -2419,7 +2419,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260311133141404061000000-o.jpg"
       ],
       "description": "Affordable 1 bed/1 bath, fully furnished Mountain Lodge condo. Granite counter tops, upgraded cabinets. Take a closer...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-24 19:16:30.466244",
       "last_updated": "2026-05-30 09:49:07.402417+00:00",
       "last_price": null,
@@ -3269,7 +3269,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260527182759218276000000-o.jpg"
       ],
       "description": "This one-of-a-kind opportunity here at Snowshoe to build on. The most private property here at Snowshoe!\nApproximately...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-28 12:33:35.301173+00:00",
       "last_updated": "2026-05-30 09:49:07.262322+00:00",
       "last_price": null,
@@ -3294,7 +3294,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260527191458072550000000-o.jpg"
       ],
       "description": "Experience mountain convenience and comfort in this beautifully updated 1-bedroom Brigham rental at Rimfire Lodge,...",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-28 12:33:35.346265+00:00",
       "last_updated": "2026-05-30 09:49:07.308896+00:00",
       "last_price": null,
@@ -3319,7 +3319,7 @@
         "https://cdn.photos.sparkplatform.com/gvb/20260529163217452909000000-o.jpg"
       ],
       "description": "Escape to the mountains in this NEW 1680 sq ft rustic-modern retreat just a short drive from Snowshoe Mountain Resort....",
-      "is_available": true,
+      "is_available": false,
       "first_seen": "2026-05-30 09:49:07.074911+00:00",
       "last_updated": "2026-05-30 09:49:07.074911+00:00",
       "last_price": null,
@@ -3718,6 +3718,112 @@
         "26229"
       ],
       "removed_listings": []
+    },
+    {
+      "date": "2026-05-31 10:05:45.126662+00:00",
+      "total_listings": 0,
+      "average_price": 0.0,
+      "median_price": 0.0,
+      "new_listings": [],
+      "price_changes": [],
+      "removed_listings": [
+        "26393",
+        "26264",
+        "26273",
+        "26392",
+        "251362",
+        "26561",
+        "26520",
+        "26397",
+        "26491",
+        "26286",
+        "26621",
+        "26128",
+        "251459",
+        "26550",
+        "251132",
+        "251504",
+        "26229",
+        "25651",
+        "26125",
+        "25799",
+        "26616",
+        "26310",
+        "26444",
+        "25289",
+        "251163",
+        "251458",
+        "26493",
+        "26568",
+        "2640",
+        "26517",
+        "26174",
+        "26271",
+        "251503",
+        "26478",
+        "26335",
+        "26645",
+        "251500",
+        "25896",
+        "26102",
+        "26542",
+        "26512",
+        "26137",
+        "26536",
+        "26603",
+        "251117",
+        "26311",
+        "26403",
+        "251479",
+        "251443",
+        "251363",
+        "251524",
+        "26644",
+        "251486",
+        "251141",
+        "26283",
+        "26108",
+        "26203",
+        "26563",
+        "268",
+        "26399",
+        "26328",
+        "26332",
+        "251217",
+        "26469",
+        "26276",
+        "25817",
+        "26575",
+        "26566",
+        "2648",
+        "26331",
+        "26423",
+        "26339",
+        "26601",
+        "241322",
+        "251131",
+        "25438",
+        "26612",
+        "25577",
+        "26544",
+        "26464",
+        "26284",
+        "251178",
+        "26342",
+        "26604",
+        "26134",
+        "2647",
+        "26658",
+        "25653",
+        "26129",
+        "26158",
+        "26312",
+        "26468",
+        "26400",
+        "2511",
+        "26360",
+        "251506"
+      ]
     }
   ]
 }
